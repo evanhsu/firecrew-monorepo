@@ -3,6 +3,7 @@ import { join } from 'path';
 import { GetBoardByGroupQuery, GetBoardByIdQuery } from './Board';
 import { PersonQuery } from './Person';
 import { GraphQLDateTime } from 'graphql-scalars';
+import { Context } from '../context/context';
 
 export const schema = makeSchema({
   /**
@@ -29,5 +30,9 @@ export const schema = makeSchema({
      * The filepath where Nexus will write the GraphQL schema SDL
      */
     schema: join(__dirname, '..', 'schema.graphql'),
+  },
+  contextType: {
+    module: join(process.cwd(), 'apps/robo-service/src/app/context/context.ts'),
+    export: 'Context',
   },
 });
