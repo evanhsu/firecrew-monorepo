@@ -1,0 +1,63 @@
+{
+  "name": "robo-ui",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "apps/robo-ui",
+  "projectType": "application",
+  "targets": {
+    "build": {
+      "executor": "@nrwl/next:build",
+      "outputs": ["{options.outputPath}"],
+      "defaultConfiguration": "production",
+      "options": {
+        "root": "apps/robo-ui",
+        "outputPath": "dist/apps/robo-ui"
+      },
+      "configurations": {
+        "development": {
+          "outputPath": "apps/robo-ui"
+        },
+        "production": {}
+      }
+    },
+    "serve": {
+      "executor": "@nrwl/next:server",
+      "defaultConfiguration": "development",
+      "options": {
+        "buildTarget": "robo-ui:build",
+        "dev": true
+      },
+      "configurations": {
+        "development": {
+          "buildTarget": "robo-ui:build:development",
+          "dev": true
+        },
+        "production": {
+          "buildTarget": "robo-ui:build:production",
+          "dev": false
+        }
+      }
+    },
+    "export": {
+      "executor": "@nrwl/next:export",
+      "options": {
+        "buildTarget": "robo-ui:build:production"
+      }
+    },
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["coverage/apps/robo-ui"],
+      "options": {
+        "jestConfig": "apps/robo-ui/jest.config.ts",
+        "passWithNoTests": true
+      }
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["apps/robo-ui/**/*.{ts,tsx,js,jsx}"]
+      }
+    }
+  },
+  "tags": []
+}
