@@ -25,7 +25,7 @@ export const GetBoardByIdQuery = extendType({
         boardId: nonNull(stringArg()),
       },
       resolve(_root, _args, ctx) {
-        return ctx.db.boards[_args.boardId];
+        return ctx.db.board(_args.boardId);
       },
     });
   },

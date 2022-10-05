@@ -12,6 +12,10 @@ export const GridRow = objectType({
     t.nonNull.field('person', {
       type: Person,
     });
-    t.nonNull.int('activeColumn');
+    t.nonNull.int('activeColumn', {
+      description:
+        'Columns are 0-indexed from left-to-right (column 0 is the left-most).' +
+        'The activeColumn is the column in which the Person on this row resides.',
+    });
   },
 });

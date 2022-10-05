@@ -96,10 +96,8 @@ let board1: Board = {
   state: board1BoardState,
 };
 
-export const db: Db = {
-  boards: {
-    'MQ==': board1,
-  },
+let boards = {
+  [board1.id]: board1,
 };
 
 type Group = {
@@ -134,5 +132,11 @@ type Person = {
   groupId: string;
 };
 export interface Db {
-  boards: Record<Board['id'], Board>;
+  board: (boardId: Board['id']) => Board;
 }
+
+export const db: Db = {
+  board: (boardId: Board['id']) => {
+    return boards[boardId];
+  },
+};

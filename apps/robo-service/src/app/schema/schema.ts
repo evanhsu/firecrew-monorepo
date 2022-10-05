@@ -1,9 +1,8 @@
+import { GraphQLDateTime } from 'graphql-scalars';
 import { makeSchema } from 'nexus';
 import { join } from 'path';
 import { GetBoardByGroupQuery, GetBoardByIdQuery } from './Board';
 import { PersonQuery } from './Person';
-import { GraphQLDateTime } from 'graphql-scalars';
-import { Context } from '../context/context';
 
 /**
  * The root folder of the monorepo, i.e. apps/ and libs/ are direct subfolders of the root.
