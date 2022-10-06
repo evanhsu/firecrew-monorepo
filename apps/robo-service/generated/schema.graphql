@@ -4,28 +4,34 @@
 
 type Board {
   group: Group
-  id: ID
+  id: ID!
   name: String
-  state: BoardState
+  state(revision: Int): BoardState
 }
 
 """"""
 type BoardState {
-  board: Board
-  createdAt: DateTime
-  id: ID
+  board: Board!
+  createdAt: DateTime!
+  id: ID!
 
   """
   The revision is an integer that's incremented every time the Board is updated (an "update" consists of a single Person being moved on the Board)
   """
-  revision: Int
-  rows: [GridRow]
+  revision: Int!
+  rows: [GridRow]!
 }
 
 """
 A date-time string at UTC, such as 2007-12-03T10:15:30Z, compliant with the `date-time` format outlined in section 5.6 of the RFC 3339 profile of the ISO 8601 standard for representation of dates and times using the Gregorian calendar.
 """
 scalar DateTime
+
+interface Error {
+  message: String
+}
+
+union GetBoardOutput = Board | NotFoundError
 
 type GridRow {
   """
@@ -47,6 +53,12 @@ type Group {
   name: String
 }
 
+type NotFoundError implements Error {
+  message: String
+  notFoundId: String
+  notFoundTypename: String
+}
+
 type Person {
   avatar: String
   id: ID
@@ -65,6 +77,6 @@ input PersonQueryFilterInput {
 
 type Query {
   getBoardByGroup(groupId: String!): Board
-  getBoardById(boardId: String!): Board
+  getBoardById(boardId: String!): GetBoardOutput
   people(filter: PersonQueryFilterInput): [Person]
 }

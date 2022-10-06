@@ -1,4 +1,4 @@
-let board1BoardState: BoardState = {
+let board1BoardStateRev1: BoardStateModel = {
   id: Buffer.from('board:1:revision:1').toString('base64'),
   revision: 1,
   createdAt: Date.toString(),
@@ -84,59 +84,90 @@ let board1BoardState: BoardState = {
   ],
 };
 
-let group1: Group = {
+let group1: GroupModel = {
   id: Buffer.from('1').toString('base64'),
   name: 'Celebrities',
 };
 
-let board1: Board = {
+let board1: BoardModel = {
   id: Buffer.from('1').toString('base64'),
   name: 'Tour Rotation',
   groupId: Buffer.from('1').toString('base64'),
-  state: board1BoardState,
 };
 
 let boards = {
   [board1.id]: board1,
 };
 
-type Group = {
+// All revisions for a specific boardId are contained in an array
+let boardStates = {
+  [board1BoardStateRev1.boardId]: [board1BoardStateRev1],
+};
+
+export type GroupModel = {
   id: string;
   name: string;
 };
-type Board = {
+export type BoardModel = {
   id: string;
   name: string;
   groupId: string;
-  state: BoardState;
+  //   state: BoardState;
 };
-type BoardState = {
+export type BoardStateModel = {
   id: string;
   revision: number;
   createdAt: string;
   boardId: string;
-  rows: GridRow[];
+  rows: GridRowModel[];
 };
-type GridRow = {
+export type GridRowModel = {
   id: string;
   order: number;
   boardStateId: string;
-  person: Person;
+  person: PersonModel;
   activeColumn: number;
 };
-type Person = {
+export type PersonModel = {
   id: string;
   name: string;
   qualifications?: string[];
   avatar?: string;
   groupId: string;
 };
+
 export interface Db {
-  board: (boardId: Board['id']) => Board;
+  board: (boardId: BoardModel['id']) => BoardModel | undefined;
+  /**
+   * Get a fully-hydrated boardState for the specified Board (including full Person documents)
+   * If no revision is provided, the latest revision is selected.
+   */
+  boardState: (
+    boardId: BoardModel['id'],
+    revision?: number
+  ) => BoardStateModel | undefined;
 }
 
 export const db: Db = {
-  board: (boardId: Board['id']) => {
+  board: (boardId) => {
     return boards[boardId];
+  },
+  boardState: (boardId, revision?) => {
+    const allRevisionsForSpecifiedBoard = boardStates[boardId];
+    if (!allRevisionsForSpecifiedBoard) {
+      // Not found
+      return undefined;
+    }
+
+    if (revision !== undefined) {
+      return allRevisionsForSpecifiedBoard.filter(
+        (boardState) => boardState.revision === revision
+      )?.[0];
+    }
+
+    // Sort by revision descending, then return the first item (the one with the highest revision number)
+    return allRevisionsForSpecifiedBoard.sort(
+      (a, b) => b.revision - a.revision
+    )[0];
   },
 };

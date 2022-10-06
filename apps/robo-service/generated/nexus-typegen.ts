@@ -3,8 +3,9 @@
  * Do not make changes to this file directly
  */
 
-
-import type { Context } from "./../src/app/context/context"
+import type * as db from "./../src/database/db"
+import type * as errors from "./../src/errors/errors"
+import type { Context } from "./../src/graphql/context"
 
 
 
@@ -33,63 +34,40 @@ export interface NexusGenScalars {
 }
 
 export interface NexusGenObjects {
-  Board: { // root type
-    group?: NexusGenRootTypes['Group'] | null; // Group
-    id?: string | null; // ID
-    name?: string | null; // String
-    state?: NexusGenRootTypes['BoardState'] | null; // BoardState
-  }
-  BoardState: { // root type
-    board?: NexusGenRootTypes['Board'] | null; // Board
-    createdAt?: NexusGenScalars['DateTime'] | null; // DateTime
-    id?: string | null; // ID
-    revision?: number | null; // Int
-    rows?: Array<NexusGenRootTypes['GridRow'] | null> | null; // [GridRow]
-  }
-  GridRow: { // root type
-    activeColumn: number; // Int!
-    id?: string | null; // ID
-    order?: number | null; // Int
-    person: NexusGenRootTypes['Person']; // Person!
-  }
-  Group: { // root type
-    board?: NexusGenRootTypes['Board'] | null; // Board
-    id?: string | null; // ID
-    members?: Array<NexusGenRootTypes['Person'] | null> | null; // [Person]
-    name?: string | null; // String
-  }
-  Person: { // root type
-    avatar?: string | null; // String
-    id?: string | null; // ID
-    name?: string | null; // String
-    qualifications?: Array<string | null> | null; // [String]
-  }
+  Board: db.BoardModel;
+  BoardState: db.BoardStateModel;
+  GridRow: db.GridRowModel;
+  Group: db.GroupModel;
+  NotFoundError: errors.NotFoundError;
+  Person: db.PersonModel;
   Query: {};
 }
 
 export interface NexusGenInterfaces {
+  Error: NexusGenRootTypes['NotFoundError'];
 }
 
 export interface NexusGenUnions {
+  GetBoardOutput: NexusGenRootTypes['Board'] | NexusGenRootTypes['NotFoundError'];
 }
 
-export type NexusGenRootTypes = NexusGenObjects
+export type NexusGenRootTypes = NexusGenInterfaces & NexusGenObjects & NexusGenUnions
 
 export type NexusGenAllTypes = NexusGenRootTypes & NexusGenScalars
 
 export interface NexusGenFieldTypes {
   Board: { // field return type
     group: NexusGenRootTypes['Group'] | null; // Group
-    id: string | null; // ID
+    id: string; // ID!
     name: string | null; // String
     state: NexusGenRootTypes['BoardState'] | null; // BoardState
   }
   BoardState: { // field return type
-    board: NexusGenRootTypes['Board'] | null; // Board
-    createdAt: NexusGenScalars['DateTime'] | null; // DateTime
-    id: string | null; // ID
-    revision: number | null; // Int
-    rows: Array<NexusGenRootTypes['GridRow'] | null> | null; // [GridRow]
+    board: NexusGenRootTypes['Board']; // Board!
+    createdAt: NexusGenScalars['DateTime']; // DateTime!
+    id: string; // ID!
+    revision: number; // Int!
+    rows: Array<NexusGenRootTypes['GridRow'] | null>; // [GridRow]!
   }
   GridRow: { // field return type
     activeColumn: number; // Int!
@@ -103,6 +81,11 @@ export interface NexusGenFieldTypes {
     members: Array<NexusGenRootTypes['Person'] | null> | null; // [Person]
     name: string | null; // String
   }
+  NotFoundError: { // field return type
+    message: string | null; // String
+    notFoundId: string | null; // String
+    notFoundTypename: string | null; // String
+  }
   Person: { // field return type
     avatar: string | null; // String
     id: string | null; // ID
@@ -111,8 +94,11 @@ export interface NexusGenFieldTypes {
   }
   Query: { // field return type
     getBoardByGroup: NexusGenRootTypes['Board'] | null; // Board
-    getBoardById: NexusGenRootTypes['Board'] | null; // Board
+    getBoardById: NexusGenRootTypes['GetBoardOutput'] | null; // GetBoardOutput
     people: Array<NexusGenRootTypes['Person'] | null> | null; // [Person]
+  }
+  Error: { // field return type
+    message: string | null; // String
   }
 }
 
@@ -142,6 +128,11 @@ export interface NexusGenFieldTypeNames {
     members: 'Person'
     name: 'String'
   }
+  NotFoundError: { // field return type name
+    message: 'String'
+    notFoundId: 'String'
+    notFoundTypename: 'String'
+  }
   Person: { // field return type name
     avatar: 'String'
     id: 'ID'
@@ -150,12 +141,20 @@ export interface NexusGenFieldTypeNames {
   }
   Query: { // field return type name
     getBoardByGroup: 'Board'
-    getBoardById: 'Board'
+    getBoardById: 'GetBoardOutput'
     people: 'Person'
+  }
+  Error: { // field return type name
+    message: 'String'
   }
 }
 
 export interface NexusGenArgTypes {
+  Board: {
+    state: { // args
+      revision?: number | null; // Int
+    }
+  }
   Query: {
     getBoardByGroup: { // args
       groupId: string; // String!
@@ -170,9 +169,12 @@ export interface NexusGenArgTypes {
 }
 
 export interface NexusGenAbstractTypeMembers {
+  GetBoardOutput: "Board" | "NotFoundError"
+  Error: "NotFoundError"
 }
 
 export interface NexusGenTypeInterfaces {
+  NotFoundError: "Error"
 }
 
 export type NexusGenObjectNames = keyof NexusGenObjects;
@@ -181,15 +183,15 @@ export type NexusGenInputNames = keyof NexusGenInputs;
 
 export type NexusGenEnumNames = never;
 
-export type NexusGenInterfaceNames = never;
+export type NexusGenInterfaceNames = keyof NexusGenInterfaces;
 
 export type NexusGenScalarNames = keyof NexusGenScalars;
 
-export type NexusGenUnionNames = never;
+export type NexusGenUnionNames = keyof NexusGenUnions;
 
 export type NexusGenObjectsUsingAbstractStrategyIsTypeOf = never;
 
-export type NexusGenAbstractsUsingStrategyResolveType = never;
+export type NexusGenAbstractsUsingStrategyResolveType = "Error" | "GetBoardOutput";
 
 export type NexusGenFeaturesConfig = {
   abstractTypeStrategies: {

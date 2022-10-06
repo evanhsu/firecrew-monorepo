@@ -19,6 +19,7 @@
         "production": {
           "optimization": true,
           "extractLicenses": true,
+          "deleteOutputPath": true,
           "inspect": false,
           "fileReplacements": [
             {
@@ -27,6 +28,16 @@
             }
           ]
         }
+      }
+    },
+    "watch": {
+      "executor": "nx:run-commands",
+      "options": {
+        "commands": [
+          {
+            "command": "npx ts-node-dev --watch --transpile-only --no-notify --project apps/robo-service/tsconfig.app.json apps/robo-service/src/main.ts"
+          }
+        ]
       }
     },
     "serve": {
@@ -40,6 +51,7 @@
         }
       }
     },
+
     "lint": {
       "executor": "@nrwl/linter:eslint",
       "outputs": ["{options.outputFile}"],
@@ -53,6 +65,12 @@
       "options": {
         "jestConfig": "apps/robo-service/jest.config.ts",
         "passWithNoTests": true
+      }
+    },
+    "generate-gql": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "npx ts-node --transpile-only --project ./apps/robo-service/tsconfig.app.json ./apps/robo-service/src/graphql/schema.ts --nexus-exit"
       }
     }
   },
