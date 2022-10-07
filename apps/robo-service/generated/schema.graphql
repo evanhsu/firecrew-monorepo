@@ -19,7 +19,7 @@ type BoardState {
   The revision is an integer that's incremented every time the Board is updated (an "update" consists of a single Person being moved on the Board)
   """
   revision: Int!
-  rows: [GridRow]!
+  rows: [PersonTile]!
 }
 
 """
@@ -33,16 +33,16 @@ interface Error {
 
 union GetBoardOutput = Board | NotFoundError
 
-type GridRow {
+input GridPositionInput {
   """
-  Columns are 0-indexed from left-to-right (column 0 is the left-most).The activeColumn is the column in which the Person on this row resides.
+  The left-most column on the Board is Column 0. The column number increases as you move to the _right_.
   """
-  activeColumn: Int!
-  id: ID
+  column: Int!
 
-  """The 0-index row number, where Row 0 is at the top of the Board"""
-  order: Int
-  person: Person!
+  """
+  The row at the very top of the Board is Row 0. The row number increases as you move down the board.
+  """
+  row: Int!
 }
 
 type Group {
@@ -51,6 +51,22 @@ type Group {
   id: ID
   members: [Person]
   name: String
+}
+
+type MoveTileMutationResponse {
+  boardState: BoardState
+}
+
+type Mutation {
+  moveTile(
+    boardId: ID!
+
+    """
+    The row/column where the Tile was positioned _after_ it was moved, i.e. the "destination"
+    """
+    newPosition: GridPositionInput!
+    tileId: ID!
+  ): MoveTileMutationResponse
 }
 
 type NotFoundError implements Error {
@@ -75,8 +91,20 @@ input PersonQueryFilterInput {
   qualification: String
 }
 
+type PersonTile {
+  """
+  Columns are 0-indexed from left-to-right (column 0 is the left-most).The activeColumn is the column in which the Person on this row resides.
+  """
+  column: Int!
+  id: ID
+  person: Person!
+
+  """The 0-index row number, where Row 0 is at the top of the Board"""
+  row: Int
+}
+
 type Query {
-  getBoardByGroup(groupId: String!): Board
+  getBoardByGroup(groupId: String!): [Board]!
   getBoardById(boardId: String!): GetBoardOutput
   people(filter: PersonQueryFilterInput): [Person]
 }

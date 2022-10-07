@@ -13,7 +13,8 @@
         "outputPath": "dist/apps/robo-service",
         "main": "apps/robo-service/src/main.ts",
         "tsConfig": "apps/robo-service/tsconfig.app.json",
-        "assets": ["apps/robo-service/src/assets"]
+        "assets": ["apps/robo-service/src/assets"],
+        "webpackConfig": "apps/robo-service/webpack.config.js"
       },
       "configurations": {
         "production": {

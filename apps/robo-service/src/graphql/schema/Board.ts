@@ -1,6 +1,7 @@
 import {
   extendType,
   intArg,
+  list,
   nonNull,
   objectType,
   stringArg,
@@ -23,8 +24,10 @@ export const Board = objectType({
       args: {
         revision: intArg(),
       },
-      resolve: (root, args, ctx) => {
-        return ctx.db.boardState(root.id, args.revision ?? undefined) ?? null;
+      resolve: async (root, args, ctx) => {
+        return (
+          (await ctx.db.boardState(root.id, args.revision ?? undefined)) ?? null
+        );
       },
     });
   },
@@ -54,8 +57,8 @@ export const GetBoardByIdQuery = extendType({
       args: {
         boardId: nonNull(stringArg()),
       },
-      resolve(_root, args, ctx) {
-        const board = ctx.db.board(args.boardId);
+      resolve: async (_root, args, ctx) => {
+        const board = await ctx.db.board(args.boardId);
 
         if (!board) {
           return new NotFoundError(
@@ -75,9 +78,12 @@ export const GetBoardByGroupQuery = extendType({
   type: 'Query',
   definition(t) {
     t.field('getBoardByGroup', {
-      type: Board,
+      type: nonNull(list(Board)),
       args: {
         groupId: nonNull(stringArg()),
+      },
+      resolve: async (_root, args, ctx) => {
+        return (await ctx.db.boards(args.groupId)) ?? [];
       },
     });
   },

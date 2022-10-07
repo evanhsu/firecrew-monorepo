@@ -15,6 +15,10 @@ declare global {
 }
 
 export interface NexusGenInputs {
+  GridPositionInput: { // input type
+    column: number; // Int!
+    row: number; // Int!
+  }
   PersonQueryFilterInput: { // input type
     id?: string | null; // ID
     qualification?: string | null; // String
@@ -36,10 +40,14 @@ export interface NexusGenScalars {
 export interface NexusGenObjects {
   Board: db.BoardModel;
   BoardState: db.BoardStateModel;
-  GridRow: db.GridRowModel;
   Group: db.GroupModel;
+  MoveTileMutationResponse: { // root type
+    boardState?: NexusGenRootTypes['BoardState'] | null; // BoardState
+  }
+  Mutation: {};
   NotFoundError: errors.NotFoundError;
   Person: db.PersonModel;
+  PersonTile: db.PersonTileModel;
   Query: {};
 }
 
@@ -67,19 +75,19 @@ export interface NexusGenFieldTypes {
     createdAt: NexusGenScalars['DateTime']; // DateTime!
     id: string; // ID!
     revision: number; // Int!
-    rows: Array<NexusGenRootTypes['GridRow'] | null>; // [GridRow]!
-  }
-  GridRow: { // field return type
-    activeColumn: number; // Int!
-    id: string | null; // ID
-    order: number | null; // Int
-    person: NexusGenRootTypes['Person']; // Person!
+    rows: Array<NexusGenRootTypes['PersonTile'] | null>; // [PersonTile]!
   }
   Group: { // field return type
     board: NexusGenRootTypes['Board'] | null; // Board
     id: string | null; // ID
     members: Array<NexusGenRootTypes['Person'] | null> | null; // [Person]
     name: string | null; // String
+  }
+  MoveTileMutationResponse: { // field return type
+    boardState: NexusGenRootTypes['BoardState'] | null; // BoardState
+  }
+  Mutation: { // field return type
+    moveTile: NexusGenRootTypes['MoveTileMutationResponse'] | null; // MoveTileMutationResponse
   }
   NotFoundError: { // field return type
     message: string | null; // String
@@ -92,8 +100,14 @@ export interface NexusGenFieldTypes {
     name: string | null; // String
     qualifications: Array<string | null> | null; // [String]
   }
+  PersonTile: { // field return type
+    column: number; // Int!
+    id: string | null; // ID
+    person: NexusGenRootTypes['Person']; // Person!
+    row: number | null; // Int
+  }
   Query: { // field return type
-    getBoardByGroup: NexusGenRootTypes['Board'] | null; // Board
+    getBoardByGroup: Array<NexusGenRootTypes['Board'] | null>; // [Board]!
     getBoardById: NexusGenRootTypes['GetBoardOutput'] | null; // GetBoardOutput
     people: Array<NexusGenRootTypes['Person'] | null> | null; // [Person]
   }
@@ -114,19 +128,19 @@ export interface NexusGenFieldTypeNames {
     createdAt: 'DateTime'
     id: 'ID'
     revision: 'Int'
-    rows: 'GridRow'
-  }
-  GridRow: { // field return type name
-    activeColumn: 'Int'
-    id: 'ID'
-    order: 'Int'
-    person: 'Person'
+    rows: 'PersonTile'
   }
   Group: { // field return type name
     board: 'Board'
     id: 'ID'
     members: 'Person'
     name: 'String'
+  }
+  MoveTileMutationResponse: { // field return type name
+    boardState: 'BoardState'
+  }
+  Mutation: { // field return type name
+    moveTile: 'MoveTileMutationResponse'
   }
   NotFoundError: { // field return type name
     message: 'String'
@@ -138,6 +152,12 @@ export interface NexusGenFieldTypeNames {
     id: 'ID'
     name: 'String'
     qualifications: 'String'
+  }
+  PersonTile: { // field return type name
+    column: 'Int'
+    id: 'ID'
+    person: 'Person'
+    row: 'Int'
   }
   Query: { // field return type name
     getBoardByGroup: 'Board'
@@ -153,6 +173,13 @@ export interface NexusGenArgTypes {
   Board: {
     state: { // args
       revision?: number | null; // Int
+    }
+  }
+  Mutation: {
+    moveTile: { // args
+      boardId: string; // ID!
+      newPosition: NexusGenInputs['GridPositionInput']; // GridPositionInput!
+      tileId: string; // ID!
     }
   }
   Query: {
