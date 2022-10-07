@@ -143,9 +143,8 @@ export const MoveTile = mutationField('moveTile', {
       fromBoardStateRevision: oldBoardState.revision,
     });
 
-    console.log(JSON.stringify(event));
     // pubsub.publish(BOARD_STATE_UPDATED, { boardState });
-    // pubsub.publish(TILE_MOVED, { boardState });
+    // pubsub.publish(TILE_MOVED, { event });
 
     return {
       boardState: persistedBoardState,
