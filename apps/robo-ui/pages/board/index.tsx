@@ -1,8 +1,8 @@
 import styled from '@emotion/styled';
-import useDeviceTouchscreenDetector from '../../components/use-device-touchscreen-detector/use-device-touchscreen-detector';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 import { TouchBackend } from 'react-dnd-touch-backend';
+import { useDeviceTouchscreenDetector } from '../../components/use-device-touchscreen-detector/use-device-touchscreen-detector';
 
 /* eslint-disable-next-line */
 export interface BoardProps {}
