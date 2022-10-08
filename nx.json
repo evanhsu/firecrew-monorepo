@@ -48,6 +48,10 @@
       "application": {
         "style": "@emotion/styled",
         "linter": "eslint"
+      },
+      "component": {
+        "style": "@emotion/styled",
+        "defaultProject": "robo-ui"
       }
     }
   },
