@@ -1,13 +1,22 @@
 import styled from '@emotion/styled';
+import Tile from '../tile/tile';
 
-/* eslint-disable-next-line */
-export interface CellProps {}
+export interface CellProps {
+  tile?: {
+    id: number;
+    name: string;
+  } | null;
+  row: number;
+  column: number;
+}
 
 const StyledCell = styled.div`
   color: pink;
 `;
 
 export function Cell(props: CellProps) {
+  const { row, column, tile } = props;
+
   // const [moveTile] = useMutation(MOVE_TILE);
   // const [sendBoardState] = useMutation(SET_BOARD_STATE)
   // const [, drop] = useDrop({
@@ -48,7 +57,18 @@ export function Cell(props: CellProps) {
   // });
 
   return (
-    <StyledCell>This is a Cell</StyledCell>
+    <StyledCell>
+      {tile ? (
+        <Tile
+          primaryText={tile.name}
+          secondaryText={String(tile.id)}
+          id={tile.id}
+          position={{ row, column }}
+        />
+      ) : (
+        ''
+      )}
+    </StyledCell>
     // <div ref={drop} style={styles}>
     //     {tile ? (<Tile primaryText={tile.name} secondaryText={String(tile.id)} id={tile.id} position={{ row, column }} />) : ''}
     // </div>
