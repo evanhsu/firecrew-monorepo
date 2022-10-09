@@ -25,6 +25,13 @@
         ]
       }
     },
+    "generate-gql": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "command": "npx graphql-codegen --config libs/robo-service-client/codegen.yml",
+        "outputPath": "apps/api/src/generated"
+      }
+    },
     "lint": {
       "executor": "@nrwl/linter:eslint",
       "outputs": ["{options.outputFile}"],
