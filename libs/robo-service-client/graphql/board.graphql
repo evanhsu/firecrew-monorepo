@@ -1,0 +1,56 @@
+query getBoardByGroup($groupId: String!) {
+  getBoardByGroup(groupId: $groupId) {
+    ...boardFragment
+  }
+}
+
+query getBoardById($boardId: String!) {
+  getBoardById(boardId: $boardId) {
+    ... on Board {
+      ...boardFragment
+    }
+    ... on NotFoundError {
+      message
+      notFoundTypename
+      notFoundId
+      __typename
+    }
+  }
+}
+
+mutation moveTile(
+  $boardId: ID!
+  $tileId: ID!
+  $newPosition: GridPositionInput!
+) {
+  moveTile(boardId: $boardId, tileId: $tileId, newPosition: $newPosition) {
+    __typename
+    boardState {
+      ...boardStateParts
+    }
+  }
+}
+
+fragment boardFragment on Board {
+  __typename
+  id
+  name
+  state {
+    ...boardStateParts
+  }
+}
+
+fragment boardStateParts on BoardState {
+  __typename
+  revision
+  rows {
+    __typename
+    id
+    row
+    column
+    person {
+      __typename
+      name
+    }
+  }
+}

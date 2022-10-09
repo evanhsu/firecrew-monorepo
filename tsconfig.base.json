@@ -15,7 +15,11 @@
     "skipLibCheck": true,
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
-    "paths": {}
+    "paths": {
+      "@firecrew/robo-service-client": [
+        "libs/robo-service-client/src/index.tsx"
+      ]
+    }
   },
   "exclude": ["node_modules", "tmp"]
 }

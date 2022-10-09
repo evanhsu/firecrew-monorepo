@@ -9,6 +9,7 @@
   },
   "private": true,
   "dependencies": {
+    "@apollo/client": "^3.7.0",
     "@emotion/react": "11.10.4",
     "@emotion/server": "11.10.0",
     "@emotion/styled": "11.10.4",
@@ -30,6 +31,9 @@
   },
   "devDependencies": {
     "@emotion/babel-plugin": "11.10.2",
+    "@graphql-codegen/cli": "^2.13.5",
+    "@graphql-codegen/typescript-operations": "^2.5.3",
+    "@graphql-codegen/typescript-react-apollo": "^3.3.3",
     "@nrwl/cli": "14.8.2",
     "@nrwl/cypress": "14.8.2",
     "@nrwl/eslint-plugin-nx": "14.8.2",
@@ -39,6 +43,8 @@
     "@nrwl/react": "14.8.2",
     "@nrwl/web": "14.8.2",
     "@nrwl/workspace": "14.8.2",
+    "@swc/core": "^1.2.173",
+    "@swc/jest": "0.2.20",
     "@testing-library/react": "13.4.0",
     "@types/jest": "28.1.1",
     "@types/node": "16.11.7",
