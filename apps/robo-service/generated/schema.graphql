@@ -13,6 +13,9 @@ type Board {
 type BoardState {
   board: Board!
   createdAt: DateTime!
+
+  """The person who made this change"""
+  createdBy: String
   id: ID!
 
   """

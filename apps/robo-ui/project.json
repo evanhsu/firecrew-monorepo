@@ -37,6 +37,12 @@
         }
       }
     },
+    "watch": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "nx run robo-ui:serve:development"
+      }
+    },
     "export": {
       "executor": "@nrwl/next:export",
       "options": {

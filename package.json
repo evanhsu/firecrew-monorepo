@@ -3,7 +3,8 @@
   "version": "0.0.0",
   "license": "MIT",
   "scripts": {
-    "start": "nx serve",
+    "start": "nx run-many --target=serve",
+    "watch": "nx run-many --target=watch --output-style=stream",
     "build": "nx build",
     "test": "nx test"
   },
@@ -65,6 +66,7 @@
     "eslint-plugin-react-hooks": "4.6.0",
     "jest": "28.1.1",
     "jest-environment-jsdom": "28.1.1",
+    "nodemon": "^2.0.20",
     "nx": "14.8.2",
     "prettier": "^2.6.2",
     "react-test-renderer": "18.2.0",

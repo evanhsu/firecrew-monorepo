@@ -73,6 +73,7 @@ export interface NexusGenFieldTypes {
   BoardState: { // field return type
     board: NexusGenRootTypes['Board']; // Board!
     createdAt: NexusGenScalars['DateTime']; // DateTime!
+    createdBy: string | null; // String
     id: string; // ID!
     revision: number; // Int!
     rows: Array<NexusGenRootTypes['PersonTile'] | null>; // [PersonTile]!
@@ -126,6 +127,7 @@ export interface NexusGenFieldTypeNames {
   BoardState: { // field return type name
     board: 'Board'
     createdAt: 'DateTime'
+    createdBy: 'String'
     id: 'ID'
     revision: 'Int'
     rows: 'PersonTile'

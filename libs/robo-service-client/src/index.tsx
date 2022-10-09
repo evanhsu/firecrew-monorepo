@@ -34,6 +34,8 @@ export type BoardState = {
   __typename?: 'BoardState';
   board: Board;
   createdAt: Scalars['DateTime'];
+  /** The person who made this change */
+  createdBy?: Maybe<Scalars['String']>;
   id: Scalars['ID'];
   /** The revision is an integer that's incremented every time the Board is updated (an "update" consists of a single Person being moved on the Board) */
   revision: Scalars['Int'];

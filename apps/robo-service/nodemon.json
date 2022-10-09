@@ -1,0 +1,8 @@
+{
+  "execMap": {
+    "ts": "ts-node --transpile-only --project apps/robo-service/tsconfig.app.json"
+  },
+  "watch": ["apps/robo-service/src/graphql/"],
+  "ignore": ["apps/robo-service/generated/"],
+  "verbose": false
+}

@@ -1,4 +1,5 @@
 import { GraphQLDateTime } from 'graphql-scalars';
+import { ProvidedRequiredArgumentsOnDirectivesRule } from 'graphql/validation/rules/ProvidedRequiredArgumentsRule';
 import { makeSchema } from 'nexus';
 import { join } from 'path';
 import * as SchemaTypes from './schema/index';
@@ -9,8 +10,13 @@ import * as SchemaTypes from './schema/index';
 const monorepoRoot = process.cwd();
 
 export const schema = makeSchema({
-  // TODO: is this necessary? Check out the 'generate-gql' target in project.json
-  shouldExitAfterGenerateArtifacts: process.argv.includes('--nexus-exit'),
+  // This Nx workspace is set up to run this schema.ts script with a file watcher
+  // during development rather than waiting for an inbound GraphQL query to trigger
+  // an update to the generated types.  Look at the project.json file.
+  shouldGenerateArtifacts: process.argv.includes('--nexus-gen'),
+  //   shouldExitAfterGenerateArtifacts: process.argv.includes(
+  //     '--nexus-gen-then-exit'
+  //   ),
 
   /**
    * Typedefs used in the schema

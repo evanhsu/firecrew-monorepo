@@ -26,10 +26,21 @@
       }
     },
     "generate-gql": {
-      "executor": "@nrwl/workspace:run-commands",
+      "executor": "nx:run-commands",
       "options": {
         "command": "npx graphql-codegen --config libs/robo-service-client/codegen.yml",
         "outputPath": "apps/api/src/generated"
+      },
+      "configurations": {
+        "watch": {
+          "command": "npx graphql-codegen --watch --config libs/robo-service-client/codegen.yml"
+        }
+      }
+    },
+    "watch": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "nx run robo-service-client:generate-gql:watch"
       }
     },
     "lint": {
