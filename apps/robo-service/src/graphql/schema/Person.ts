@@ -3,7 +3,7 @@ import { arg, extendType, inputObjectType, objectType } from 'nexus';
 export const Person = objectType({
   name: 'Person',
   definition(t) {
-    t.id('id');
+    t.nonNull.id('id');
     t.string('name');
     t.list.string('qualifications');
     t.string('avatar');

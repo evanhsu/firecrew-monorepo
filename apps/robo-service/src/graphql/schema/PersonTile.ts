@@ -4,8 +4,8 @@ import { Person } from './Person';
 export const PersonTile = objectType({
   name: 'PersonTile',
   definition(t) {
-    t.id('id');
-    t.int('row', {
+    t.nonNull.id('id');
+    t.nonNull.int('row', {
       description:
         'The 0-index row number, where Row 0 is at the top of the Board',
     });

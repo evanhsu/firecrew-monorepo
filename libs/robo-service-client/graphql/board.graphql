@@ -34,6 +34,10 @@ mutation moveTile(
 fragment boardFragment on Board {
   __typename
   id
+  group {
+    __typename
+    id
+  }
   name
   state {
     ...boardStateParts
@@ -42,7 +46,9 @@ fragment boardFragment on Board {
 
 fragment boardStateParts on BoardState {
   __typename
+  id
   revision
+  createdAt
   rows {
     __typename
     id
@@ -50,7 +56,9 @@ fragment boardStateParts on BoardState {
     column
     person {
       __typename
+      id
       name
+      qualifications
     }
   }
 }

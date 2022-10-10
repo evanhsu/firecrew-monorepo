@@ -96,15 +96,15 @@ export interface NexusGenFieldTypes {
   }
   Person: { // field return type
     avatar: string | null; // String
-    id: string | null; // ID
+    id: string; // ID!
     name: string | null; // String
     qualifications: Array<string | null> | null; // [String]
   }
   PersonTile: { // field return type
     column: number; // Int!
-    id: string | null; // ID
+    id: string; // ID!
     person: NexusGenRootTypes['Person']; // Person!
-    row: number | null; // Int
+    row: number; // Int!
   }
   Query: { // field return type
     getBoardByGroup: Array<NexusGenRootTypes['Board'] | null>; // [Board]!

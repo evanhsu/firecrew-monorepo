@@ -1,17 +1,18 @@
+import { ApolloError } from '@apollo/client/errors';
 import styled from '@emotion/styled';
-import { DndProvider } from 'react-dnd';
-import { HTML5Backend } from 'react-dnd-html5-backend';
-import { TouchBackend } from 'react-dnd-touch-backend';
-import useDeviceTouchscreenDetector from '../../components/use-device-touchscreen-detector/use-device-touchscreen-detector';
+import {
+  Board as BoardType,
+  BoardStatePartsFragment,
+} from '@firecrew/robo-service-client';
 import HeaderRow from '../header-row/header-row';
 import Row from '../row/row';
 
 export interface BoardProps {
-  board: any;
-  boardState: any;
+  board: BoardType;
+  boardState?: BoardStatePartsFragment | null;
   columnHeaders: string[];
   loading: boolean;
-  error?: { message: string } /*ApolloError*/ | undefined;
+  error?: ApolloError | undefined;
 }
 
 const StyledBoard = styled.div({
@@ -31,11 +32,11 @@ export function Board(props: BoardProps) {
   }
 
   // Return early if there's no data
-  if (!boardState) {
+  if (!boardState || !boardState.rows?.length) {
     return renderBoard(board, columnHeaders, []);
   }
 
-  const boardRows = boardState.rows.map((row: any, index: number) => {
+  const boardRows = boardState.rows.map((row, index: number) => {
     const person = {
       id: row.person.id,
       name: row.person.name,
@@ -43,7 +44,7 @@ export function Board(props: BoardProps) {
     return (
       <Row
         person={person}
-        activeColumn={row.activeColumn}
+        activeColumn={row?.column}
         index={index}
         key={person.id}
       />
@@ -69,18 +70,4 @@ const renderBoard = (
   </div>
 );
 
-const BoardWithData = () => {
-  const deviceHasTouchscreen = useDeviceTouchscreenDetector();
-  return (
-    <DndProvider backend={deviceHasTouchscreen ? HTML5Backend : TouchBackend}>
-      <StyledBoard>
-        <h1>
-          Welcome to Boardddd! This device{' '}
-          {deviceHasTouchscreen ? 'has' : 'does not have'} a touchscreen
-        </h1>
-      </StyledBoard>
-    </DndProvider>
-  );
-};
-
-export default BoardWithData;
+export default Board;

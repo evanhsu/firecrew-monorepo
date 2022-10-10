@@ -10,11 +10,11 @@ export interface RowProps {
   index: number;
 }
 
-const StyledRow = styled.div`
-    display: 'flex',
-    flexDirection: 'row',
-    height: '75px',
-`;
+const StyledRow = styled.div({
+  display: 'flex',
+  flexDirection: 'row',
+  height: '75px',
+});
 
 export function Row(props: RowProps) {
   const { person, activeColumn, index } = props;

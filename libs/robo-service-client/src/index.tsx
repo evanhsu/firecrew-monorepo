@@ -89,7 +89,7 @@ export type NotFoundError = Error & {
 export type Person = {
   __typename?: 'Person';
   avatar?: Maybe<Scalars['String']>;
-  id?: Maybe<Scalars['ID']>;
+  id: Scalars['ID'];
   name?: Maybe<Scalars['String']>;
   qualifications?: Maybe<Array<Maybe<Scalars['String']>>>;
 };
@@ -104,10 +104,10 @@ export type PersonTile = {
   __typename?: 'PersonTile';
   /** Columns are 0-indexed from left-to-right (column 0 is the left-most).The activeColumn is the column in which the Person on this row resides. */
   column: Scalars['Int'];
-  id?: Maybe<Scalars['ID']>;
+  id: Scalars['ID'];
   person: Person;
   /** The 0-index row number, where Row 0 is at the top of the Board */
-  row?: Maybe<Scalars['Int']>;
+  row: Scalars['Int'];
 };
 
 export type Query = {
@@ -137,14 +137,14 @@ export type GetBoardByGroupQueryVariables = Exact<{
 }>;
 
 
-export type GetBoardByGroupQuery = { __typename?: 'Query', getBoardByGroup: Array<{ __typename: 'Board', id: string, name?: string | null, state?: { __typename: 'BoardState', revision: number, rows: Array<{ __typename: 'PersonTile', id?: string | null, row?: number | null, column: number, person: { __typename: 'Person', name?: string | null } } | null> } | null } | null> };
+export type GetBoardByGroupQuery = { __typename?: 'Query', getBoardByGroup: Array<{ __typename: 'Board', id: string, name?: string | null, group?: { __typename: 'Group', id?: string | null } | null, state?: { __typename: 'BoardState', id: string, revision: number, createdAt: any, rows: Array<{ __typename: 'PersonTile', id: string, row: number, column: number, person: { __typename: 'Person', id: string, name?: string | null, qualifications?: Array<string | null> | null } } | null> } | null } | null> };
 
 export type GetBoardByIdQueryVariables = Exact<{
   boardId: Scalars['String'];
 }>;
 
 
-export type GetBoardByIdQuery = { __typename?: 'Query', getBoardById?: { __typename: 'Board', id: string, name?: string | null, state?: { __typename: 'BoardState', revision: number, rows: Array<{ __typename: 'PersonTile', id?: string | null, row?: number | null, column: number, person: { __typename: 'Person', name?: string | null } } | null> } | null } | { __typename: 'NotFoundError', message?: string | null, notFoundTypename?: string | null, notFoundId?: string | null } | null };
+export type GetBoardByIdQuery = { __typename?: 'Query', getBoardById?: { __typename: 'Board', id: string, name?: string | null, group?: { __typename: 'Group', id?: string | null } | null, state?: { __typename: 'BoardState', id: string, revision: number, createdAt: any, rows: Array<{ __typename: 'PersonTile', id: string, row: number, column: number, person: { __typename: 'Person', id: string, name?: string | null, qualifications?: Array<string | null> | null } } | null> } | null } | { __typename: 'NotFoundError', message?: string | null, notFoundTypename?: string | null, notFoundId?: string | null } | null };
 
 export type MoveTileMutationVariables = Exact<{
   boardId: Scalars['ID'];
@@ -153,16 +153,18 @@ export type MoveTileMutationVariables = Exact<{
 }>;
 
 
-export type MoveTileMutation = { __typename?: 'Mutation', moveTile?: { __typename: 'MoveTileMutationResponse', boardState?: { __typename: 'BoardState', revision: number, rows: Array<{ __typename: 'PersonTile', id?: string | null, row?: number | null, column: number, person: { __typename: 'Person', name?: string | null } } | null> } | null } | null };
+export type MoveTileMutation = { __typename?: 'Mutation', moveTile?: { __typename: 'MoveTileMutationResponse', boardState?: { __typename: 'BoardState', id: string, revision: number, createdAt: any, rows: Array<{ __typename: 'PersonTile', id: string, row: number, column: number, person: { __typename: 'Person', id: string, name?: string | null, qualifications?: Array<string | null> | null } } | null> } | null } | null };
 
-export type BoardFragmentFragment = { __typename: 'Board', id: string, name?: string | null, state?: { __typename: 'BoardState', revision: number, rows: Array<{ __typename: 'PersonTile', id?: string | null, row?: number | null, column: number, person: { __typename: 'Person', name?: string | null } } | null> } | null };
+export type BoardFragmentFragment = { __typename: 'Board', id: string, name?: string | null, group?: { __typename: 'Group', id?: string | null } | null, state?: { __typename: 'BoardState', id: string, revision: number, createdAt: any, rows: Array<{ __typename: 'PersonTile', id: string, row: number, column: number, person: { __typename: 'Person', id: string, name?: string | null, qualifications?: Array<string | null> | null } } | null> } | null };
 
-export type BoardStatePartsFragment = { __typename: 'BoardState', revision: number, rows: Array<{ __typename: 'PersonTile', id?: string | null, row?: number | null, column: number, person: { __typename: 'Person', name?: string | null } } | null> };
+export type BoardStatePartsFragment = { __typename: 'BoardState', id: string, revision: number, createdAt: any, rows: Array<{ __typename: 'PersonTile', id: string, row: number, column: number, person: { __typename: 'Person', id: string, name?: string | null, qualifications?: Array<string | null> | null } } | null> };
 
 export const BoardStatePartsFragmentDoc = gql`
     fragment boardStateParts on BoardState {
   __typename
+  id
   revision
+  createdAt
   rows {
     __typename
     id
@@ -170,7 +172,9 @@ export const BoardStatePartsFragmentDoc = gql`
     column
     person {
       __typename
+      id
       name
+      qualifications
     }
   }
 }
@@ -179,6 +183,10 @@ export const BoardFragmentFragmentDoc = gql`
     fragment boardFragment on Board {
   __typename
   id
+  group {
+    __typename
+    id
+  }
   name
   state {
     ...boardStateParts
