@@ -6,6 +6,7 @@ import { link } from './link';
 export const apolloClient = new ApolloClient({
   link,
   cache: apolloCache,
+  connectToDevTools: true,
 });
 
 const apolloClientZzz = new ApolloClient({
