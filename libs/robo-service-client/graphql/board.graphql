@@ -1,13 +1,13 @@
 query getBoardByGroup($groupId: String!) {
   getBoardByGroup(groupId: $groupId) {
-    ...boardFragment
+    ...boardParts
   }
 }
 
 query getBoardById($boardId: String!) {
   getBoardById(boardId: $boardId) {
     ... on Board {
-      ...boardFragment
+      ...boardParts
     }
     ... on NotFoundError {
       message
@@ -31,7 +31,7 @@ mutation moveTile(
   }
 }
 
-fragment boardFragment on Board {
+fragment boardParts on Board {
   __typename
   id
   group {

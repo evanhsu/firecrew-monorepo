@@ -5,7 +5,7 @@ import theme from '../../theme';
 export interface TileProps {
   primaryText: string;
   secondaryText?: string;
-  id: number;
+  id: string;
   position: {
     row: number;
     column: number;
@@ -40,23 +40,32 @@ const SecondaryText = styled.span`
 export function Tile(props: TileProps) {
   const { primaryText, secondaryText, id, position } = props;
 
-  const [{ opacity }, dragRef] = useDrag(
+  const [{ isDragging }, dragRef, dragPreview] = useDrag(
     () => ({
       type: 'TILE',
       item: { id, position },
       collect: (monitor) => ({
-        opacity: monitor.isDragging() ? 0.5 : 1,
+        isDragging: monitor.isDragging(),
       }),
-      isDragging: (monitor) => {
-        return id === monitor.getItem().id;
+      // Using a custom isDragging method because the original component gets
+      // unmounted during the dragging and later “resurrected” with a different
+      // parent. We want the Tile to retain the dragged appearance—even though
+      // technically, the component gets unmounted and a different one gets mounted
+      // every time you move it to another cell.
+      isDragging: (monitor) => id === monitor.getItem()?.id,
+      end: (draggedItem, monitor) => {
+        if (monitor.didDrop()) {
+          console.log(draggedItem);
+        }
       },
     }),
     []
   );
 
+  isDragging && console.log(`dragging ${id}`);
   return (
     // TODO: The opacity is retained while dragging vertically, but not while dragging horizontally.
-    <StyledTile ref={dragRef} opacity={opacity}>
+    <StyledTile ref={dragRef} opacity={isDragging ? 0.4 : 1}>
       <PrimaryText>{primaryText}</PrimaryText>
       <SecondaryText>{secondaryText}</SecondaryText>
     </StyledTile>

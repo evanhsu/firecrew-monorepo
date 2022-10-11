@@ -155,7 +155,7 @@ export type MoveTileMutationVariables = Exact<{
 
 export type MoveTileMutation = { __typename?: 'Mutation', moveTile?: { __typename: 'MoveTileMutationResponse', boardState?: { __typename: 'BoardState', id: string, revision: number, createdAt: any, rows: Array<{ __typename: 'PersonTile', id: string, row: number, column: number, person: { __typename: 'Person', id: string, name?: string | null, qualifications?: Array<string | null> | null } } | null> } | null } | null };
 
-export type BoardFragmentFragment = { __typename: 'Board', id: string, name?: string | null, group?: { __typename: 'Group', id?: string | null } | null, state?: { __typename: 'BoardState', id: string, revision: number, createdAt: any, rows: Array<{ __typename: 'PersonTile', id: string, row: number, column: number, person: { __typename: 'Person', id: string, name?: string | null, qualifications?: Array<string | null> | null } } | null> } | null };
+export type BoardPartsFragment = { __typename: 'Board', id: string, name?: string | null, group?: { __typename: 'Group', id?: string | null } | null, state?: { __typename: 'BoardState', id: string, revision: number, createdAt: any, rows: Array<{ __typename: 'PersonTile', id: string, row: number, column: number, person: { __typename: 'Person', id: string, name?: string | null, qualifications?: Array<string | null> | null } } | null> } | null };
 
 export type BoardStatePartsFragment = { __typename: 'BoardState', id: string, revision: number, createdAt: any, rows: Array<{ __typename: 'PersonTile', id: string, row: number, column: number, person: { __typename: 'Person', id: string, name?: string | null, qualifications?: Array<string | null> | null } } | null> };
 
@@ -179,8 +179,8 @@ export const BoardStatePartsFragmentDoc = gql`
   }
 }
     `;
-export const BoardFragmentFragmentDoc = gql`
-    fragment boardFragment on Board {
+export const BoardPartsFragmentDoc = gql`
+    fragment boardParts on Board {
   __typename
   id
   group {
@@ -196,10 +196,10 @@ export const BoardFragmentFragmentDoc = gql`
 export const GetBoardByGroupDocument = gql`
     query getBoardByGroup($groupId: String!) {
   getBoardByGroup(groupId: $groupId) {
-    ...boardFragment
+    ...boardParts
   }
 }
-    ${BoardFragmentFragmentDoc}`;
+    ${BoardPartsFragmentDoc}`;
 
 /**
  * __useGetBoardByGroupQuery__
@@ -232,7 +232,7 @@ export const GetBoardByIdDocument = gql`
     query getBoardById($boardId: String!) {
   getBoardById(boardId: $boardId) {
     ... on Board {
-      ...boardFragment
+      ...boardParts
     }
     ... on NotFoundError {
       message
@@ -242,7 +242,7 @@ export const GetBoardByIdDocument = gql`
     }
   }
 }
-    ${BoardFragmentFragmentDoc}`;
+    ${BoardPartsFragmentDoc}`;
 
 /**
  * __useGetBoardByIdQuery__

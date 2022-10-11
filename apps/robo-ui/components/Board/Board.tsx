@@ -37,6 +37,10 @@ export function Board(props: BoardProps) {
   }
 
   const boardRows = boardState.rows.map((row, index: number) => {
+    if (!row) {
+      throw new Error('WAT!?');
+    }
+
     const person = {
       id: row.person.id,
       name: row.person.name,

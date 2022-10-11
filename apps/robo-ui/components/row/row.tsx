@@ -3,7 +3,7 @@ import Cell from '../cell/cell';
 
 export interface RowProps {
   person: {
-    id: number;
+    id: string;
     name: string;
   };
   activeColumn: number;
