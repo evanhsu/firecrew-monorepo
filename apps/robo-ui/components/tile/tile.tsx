@@ -55,11 +55,15 @@ export function Tile(props: TileProps) {
       isDragging: (monitor) => id === monitor.getItem()?.id,
       end: (draggedItem, monitor) => {
         if (monitor.didDrop()) {
-          console.log(draggedItem);
+          console.log(
+            `Tile dropped: ${JSON.stringify(
+              draggedItem
+            )} - Tile: {id:${id}, position:${JSON.stringify(position)}}`
+          );
         }
       },
     }),
-    []
+    [position]
   );
 
   isDragging && console.log(`dragging ${id}`);
