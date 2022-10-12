@@ -29,7 +29,8 @@
       "configurations": {
         "development": {
           "buildTarget": "robo-ui:build:development",
-          "dev": true
+          "dev": true,
+          "hostname": "192.168.50.42"
         },
         "production": {
           "buildTarget": "robo-ui:build:production",
