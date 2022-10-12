@@ -108,3 +108,7 @@ type Query {
   getBoardById(boardId: String!): GetBoardOutput
   people(filter: PersonQueryFilterInput): [Person]
 }
+
+type Subscription {
+  watchBoard(boardId: String!): Board!
+}

@@ -1,9 +1,9 @@
 import { ApolloClient } from '@apollo/client';
 import { apolloCache } from './cache';
-import { link } from './link';
+import { splitLink } from './link';
 
 export const apolloClient = new ApolloClient({
   connectToDevTools: true,
-  link,
+  link: splitLink,
   cache: apolloCache,
 });

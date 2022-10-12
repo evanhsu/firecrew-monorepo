@@ -1,5 +1,4 @@
 import { GraphQLDateTime } from 'graphql-scalars';
-import { ProvidedRequiredArgumentsOnDirectivesRule } from 'graphql/validation/rules/ProvidedRequiredArgumentsRule';
 import { makeSchema } from 'nexus';
 import { join } from 'path';
 import * as SchemaTypes from './schema/index';

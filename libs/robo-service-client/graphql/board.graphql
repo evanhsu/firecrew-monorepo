@@ -18,6 +18,12 @@ query getBoardById($boardId: String!) {
   }
 }
 
+subscription watchBoard($boardId: String!) {
+  watchBoard(boardId: $boardId) {
+    ...boardParts
+  }
+}
+
 mutation moveTile(
   $boardId: ID!
   $tileId: ID!

@@ -132,6 +132,16 @@ export type QueryPeopleArgs = {
   filter?: InputMaybe<PersonQueryFilterInput>;
 };
 
+export type Subscription = {
+  __typename?: 'Subscription';
+  watchBoard: Board;
+};
+
+
+export type SubscriptionWatchBoardArgs = {
+  boardId: Scalars['String'];
+};
+
 export type GetBoardByGroupQueryVariables = Exact<{
   groupId: Scalars['String'];
 }>;
@@ -145,6 +155,13 @@ export type GetBoardByIdQueryVariables = Exact<{
 
 
 export type GetBoardByIdQuery = { __typename?: 'Query', getBoardById?: { __typename: 'Board', id: string, name?: string | null, group?: { __typename: 'Group', id?: string | null } | null, state?: { __typename: 'BoardState', id: string, revision: number, createdAt: any, rows: Array<{ __typename: 'PersonTile', id: string, row: number, column: number, person: { __typename: 'Person', id: string, name?: string | null, qualifications?: Array<string | null> | null } } | null> } | null } | { __typename: 'NotFoundError', message?: string | null, notFoundTypename?: string | null, notFoundId?: string | null } | null };
+
+export type WatchBoardSubscriptionVariables = Exact<{
+  boardId: Scalars['String'];
+}>;
+
+
+export type WatchBoardSubscription = { __typename?: 'Subscription', watchBoard: { __typename: 'Board', id: string, name?: string | null, group?: { __typename: 'Group', id?: string | null } | null, state?: { __typename: 'BoardState', id: string, revision: number, createdAt: any, rows: Array<{ __typename: 'PersonTile', id: string, row: number, column: number, person: { __typename: 'Person', id: string, name?: string | null, qualifications?: Array<string | null> | null } } | null> } | null } };
 
 export type MoveTileMutationVariables = Exact<{
   boardId: Scalars['ID'];
@@ -271,6 +288,36 @@ export function useGetBoardByIdLazyQuery(baseOptions?: Apollo.LazyQueryHookOptio
 export type GetBoardByIdQueryHookResult = ReturnType<typeof useGetBoardByIdQuery>;
 export type GetBoardByIdLazyQueryHookResult = ReturnType<typeof useGetBoardByIdLazyQuery>;
 export type GetBoardByIdQueryResult = Apollo.QueryResult<GetBoardByIdQuery, GetBoardByIdQueryVariables>;
+export const WatchBoardDocument = gql`
+    subscription watchBoard($boardId: String!) {
+  watchBoard(boardId: $boardId) {
+    ...boardParts
+  }
+}
+    ${BoardPartsFragmentDoc}`;
+
+/**
+ * __useWatchBoardSubscription__
+ *
+ * To run a query within a React component, call `useWatchBoardSubscription` and pass it any options that fit your needs.
+ * When your component renders, `useWatchBoardSubscription` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the subscription, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useWatchBoardSubscription({
+ *   variables: {
+ *      boardId: // value for 'boardId'
+ *   },
+ * });
+ */
+export function useWatchBoardSubscription(baseOptions: Apollo.SubscriptionHookOptions<WatchBoardSubscription, WatchBoardSubscriptionVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useSubscription<WatchBoardSubscription, WatchBoardSubscriptionVariables>(WatchBoardDocument, options);
+      }
+export type WatchBoardSubscriptionHookResult = ReturnType<typeof useWatchBoardSubscription>;
+export type WatchBoardSubscriptionResult = Apollo.SubscriptionResult<WatchBoardSubscription>;
 export const MoveTileDocument = gql`
     mutation moveTile($boardId: ID!, $tileId: ID!, $newPosition: GridPositionInput!) {
   moveTile(boardId: $boardId, tileId: $tileId, newPosition: $newPosition) {

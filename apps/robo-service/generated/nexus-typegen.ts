@@ -49,6 +49,7 @@ export interface NexusGenObjects {
   Person: db.PersonModel;
   PersonTile: db.PersonTileModel;
   Query: {};
+  Subscription: {};
 }
 
 export interface NexusGenInterfaces {
@@ -111,6 +112,9 @@ export interface NexusGenFieldTypes {
     getBoardById: NexusGenRootTypes['GetBoardOutput'] | null; // GetBoardOutput
     people: Array<NexusGenRootTypes['Person'] | null> | null; // [Person]
   }
+  Subscription: { // field return type
+    watchBoard: NexusGenRootTypes['Board']; // Board!
+  }
   Error: { // field return type
     message: string | null; // String
   }
@@ -164,6 +168,9 @@ export interface NexusGenFieldTypeNames {
     getBoardById: 'GetBoardOutput'
     people: 'Person'
   }
+  Subscription: { // field return type name
+    watchBoard: 'Board'
+  }
   Error: { // field return type name
     message: 'String'
   }
@@ -191,6 +198,11 @@ export interface NexusGenArgTypes {
     }
     people: { // args
       filter?: NexusGenInputs['PersonQueryFilterInput'] | null; // PersonQueryFilterInput
+    }
+  }
+  Subscription: {
+    watchBoard: { // args
+      boardId: string; // String!
     }
   }
 }

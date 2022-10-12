@@ -5,11 +5,14 @@ import {
   nonNull,
   objectType,
   stringArg,
+  subscriptionField,
   unionType,
 } from 'nexus';
 import { NotFoundError } from '../../errors/errors';
+import { pubsub } from '../../pubsub/pubsub';
 import { BoardState } from './BoardState';
 import { Group } from './Group';
+import { withFilter } from 'graphql-subscriptions';
 
 export const Board = objectType({
   name: 'Board',
@@ -86,5 +89,27 @@ export const GetBoardByGroupQuery = extendType({
         return (await ctx.db.boards(args.groupId)) ?? [];
       },
     });
+  },
+});
+
+export const SingleBoardSubscription = subscriptionField('watchBoard', {
+  type: nonNull(Board),
+  args: {
+    boardId: nonNull(stringArg()),
+  },
+  // Filtering out events that correspond with other Boards (not the one being "watched" via args.groupId)
+  // By preventing the subscribe function from returning a value, we prevent a subscription update from being
+  // broadcast.
+  subscribe: withFilter(
+    () => pubsub.asyncIterator([`BOARD_UPDATED`]),
+    (payload, variables) => {
+      return payload.board.boardId === variables.boardId;
+    }
+  ),
+  // The return value from the subscribe() function becomes the 'root' input to the resolve() function.
+  // resolve() is called every time subscribe() returns a value.
+  // @ts-ignore
+  resolve: async (root, args, ctx) => {
+    return await ctx.db.board(args.boardId);
   },
 });

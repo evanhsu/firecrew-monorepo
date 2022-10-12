@@ -6,6 +6,7 @@ import {
   nonNull,
   objectType,
 } from 'nexus';
+import { pubsub } from '../../pubsub/pubsub';
 import { BoardState } from './BoardState';
 
 // const SetBoardStateMutationResponse = objectType({
@@ -143,8 +144,7 @@ export const MoveTile = mutationField('moveTile', {
       fromBoardStateRevision: oldBoardState.revision,
     });
 
-    // pubsub.publish(BOARD_STATE_UPDATED, { boardState });
-    // pubsub.publish(TILE_MOVED, { event });
+    pubsub.publish('BOARD_UPDATED', { board: { boardId: args.boardId } });
 
     return {
       boardState: persistedBoardState,

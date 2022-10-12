@@ -6,6 +6,16 @@ import update from 'immutability-helper';
 import { RefObject } from 'react';
 import { DropTargetMonitor } from 'react-dnd';
 
+/**
+ * NextJS may attempt to do some Server-Side rendering of your React code.
+ * Some code is intended to always run in the browser (e.g. websocket client) and needs a way
+ * to short-circuit if it's being rendered on the server.
+ *
+ * @returns boolean true if currently executing server-side.
+ *                  false if we're in a browser.
+ */
+export const isSSR = () => typeof window === 'undefined';
+
 export const coordinatesAreEqual = (
   position1: GridPositionInput,
   position2: GridPositionInput
