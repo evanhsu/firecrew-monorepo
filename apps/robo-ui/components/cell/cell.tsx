@@ -1,18 +1,18 @@
+import { gql } from '@apollo/client';
 import styled from '@emotion/styled';
-import Tile, { TileProps } from '../tile/tile';
-import theme from '../../theme';
-import { DropTargetMonitor, useDrop, XYCoord } from 'react-dnd';
 import {
-  BoardStatePartsFragment,
   GetBoardByGroupDocument,
   GetBoardByGroupQueryResult,
   GridPositionInput,
+  useMoveTileMutation,
 } from '@firecrew/robo-service-client';
-import { apolloCache } from '../../apollo/cache';
-import { v4 as uuidv4 } from 'uuid';
-import { gql } from '@apollo/client';
-import update from 'immutability-helper';
 import { RefObject, useRef } from 'react';
+import { DropTargetMonitor, useDrop } from 'react-dnd';
+import { v4 as uuidv4 } from 'uuid';
+import { apolloCache } from '../../apollo/cache';
+import theme from '../../theme';
+import { moveTileOnGrid, overlapIsSufficient } from '../../utils/utils';
+import Tile, { TileProps } from '../tile/tile';
 
 export interface CellProps {
   tile?: {
@@ -32,87 +32,6 @@ const StyledCell = styled.div({
   marginLeft: '2px',
   marginRight: '2px',
 });
-
-const coordinatesAreEqual = (
-  position1: GridPositionInput,
-  position2: GridPositionInput
-): boolean => {
-  return (
-    position1.row === position2.row && position1.column === position2.column
-  );
-};
-
-const overlapIsSufficient = (
-  startPosition: GridPositionInput,
-  hoverPosition: GridPositionInput,
-  ref: RefObject<HTMLDivElement>,
-  monitor: DropTargetMonitor
-) => {
-  // Don't replace items with themselves
-  if (coordinatesAreEqual(startPosition, hoverPosition)) {
-    return false;
-  }
-  if (!ref.current) {
-    return false;
-  }
-  // Determine rectangle on screen
-  const hoverBoundingRect = ref.current?.getBoundingClientRect();
-
-  // Get vertical middle
-  const hoverMiddleY = (hoverBoundingRect.bottom - hoverBoundingRect.top) / 2;
-  const hoverUpperQuarterY =
-    (hoverBoundingRect.bottom - hoverBoundingRect.top) / 4;
-  const hoverLowerQuarterY = hoverUpperQuarterY * 3;
-
-  // Determine mouse position
-  const clientOffset = monitor.getClientOffset();
-
-  // Get pixels to the top
-  const hoverClientY = clientOffset!.y - hoverBoundingRect.top;
-
-  // Only perform the move when the mouse has crossed half of the items height
-  // When dragging downwards, only move when the cursor is below 50%
-  // When dragging upwards, only move when the cursor is above 50%
-
-  // Dragging downwards
-  if (
-    startPosition.row < hoverPosition.row &&
-    hoverClientY < hoverUpperQuarterY
-  ) {
-    return false;
-  }
-
-  // Dragging upwards
-  if (
-    startPosition.row > hoverPosition.row &&
-    hoverClientY > hoverLowerQuarterY
-  ) {
-    return false;
-  }
-
-  return true;
-};
-
-const moveTileOnGrid = (
-  rows: BoardStatePartsFragment['rows'],
-  oldPosition: GridPositionInput,
-  newPosition: GridPositionInput
-) => {
-  const rowToBeMoved = { ...rows[oldPosition.row] };
-  rowToBeMoved!.column = newPosition.column;
-  const postMoveRows = update(rows, {
-    // @ts-ignore
-    $splice: [
-      [oldPosition.row, 1],
-      [newPosition.row, 0, rowToBeMoved],
-    ],
-  }).map((row, i) => ({
-    ...row,
-    row: i,
-  }));
-
-  return postMoveRows;
-};
 
 interface Positionable {
   position: GridPositionInput;
@@ -136,7 +55,9 @@ function onHover(
   }
 
   console.log(
-    `${JSON.stringify(startPosition)}, ${JSON.stringify(hoverPosition)}`
+    `Tile:${JSON.stringify(startPosition)}, Cell:${JSON.stringify(
+      hoverPosition
+    )}`
   );
 
   // TODO: Need access to the board ID - context? Or maybe just a separate cache query?
@@ -216,9 +137,8 @@ function onHover(
 
 export function Cell(props: CellProps) {
   const { row, column, tile } = props;
+  const [moveTileMutation, { data, loading, error }] = useMoveTileMutation();
 
-  //   const [moveTile] = useMutation(MOVE_TILE);
-  //   const [sendBoardState] = useMutation(SET_BOARD_STATE)
   const ref = useRef<HTMLDivElement>(null);
   const [, drop] = useDrop<TileProps>({
     accept: 'TILE',
@@ -227,22 +147,16 @@ export function Cell(props: CellProps) {
     },
     drop(item, monitor) {
       console.log(`DROPPED at (${item.position.row}, ${item.position.column})`);
+
+      moveTileMutation({
+        variables: {
+          boardId: 'board-1-uuid',
+          tileId: item.id,
+          newPosition: item.position,
+        },
+      });
+
       // TODO: prune all of the "drag-*" boardstates from local cache
-
-      // Send the entire board state to the API here: "mutation setBoardState"
-      //   boardState.then((board: any) => {
-      //     const trimmedRows = board.data?.moveTile?.state?.rows.map(
-      //       (row: any) => {
-      //         let trimmedRow = { ...row }; // Clone this object
-      //         delete trimmedRow.__typename;
-      //         delete trimmedRow.person.__typename;
-      //         return trimmedRow;
-      //       }
-      //     );
-
-      //     // const setBoardStateResponse = sendBoardState({ variables: { boardState: trimmedRows }})
-      //     // setBoardStateResponse.then((data) => console.log(data));
-      //   });
     },
   });
 
@@ -261,9 +175,6 @@ export function Cell(props: CellProps) {
         ''
       )}
     </StyledCell>
-    // <div ref={drop} style={styles}>
-    //     {tile ? (<Tile primaryText={tile.name} secondaryText={String(tile.id)} id={tile.id} position={{ row, column }} />) : ''}
-    // </div>
   );
 }
 
