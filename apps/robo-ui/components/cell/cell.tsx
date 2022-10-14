@@ -125,7 +125,10 @@ function onHover(
   apolloCache.modify({
     id: apolloCache.identify(preMoveBoard),
     fields: {
+      // Change the value of the 'state' field...
       state(_boardState) {
+        // Set the 'state.__ref' value (this is a "foreign key" reference to a BoardState object in the Apollo cache)
+        // We're changing the 'ref' to point to the new BoardState that we just created above (with the writeQuery() call)
         return {
           __ref: apolloCache.identify(newBoardState),
         };
