@@ -98,8 +98,8 @@ export interface NexusGenFieldTypes {
   Person: { // field return type
     avatar: string | null; // String
     id: string; // ID!
-    name: string | null; // String
-    qualifications: Array<string | null> | null; // [String]
+    name: string; // String!
+    qualifications: Array<string | null>; // [String]!
   }
   PersonTile: { // field return type
     column: number; // Int!

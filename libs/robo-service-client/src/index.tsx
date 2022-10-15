@@ -90,8 +90,8 @@ export type Person = {
   __typename?: 'Person';
   avatar?: Maybe<Scalars['String']>;
   id: Scalars['ID'];
-  name?: Maybe<Scalars['String']>;
-  qualifications?: Maybe<Array<Maybe<Scalars['String']>>>;
+  name: Scalars['String'];
+  qualifications: Array<Maybe<Scalars['String']>>;
 };
 
 export type PersonQueryFilterInput = {
@@ -147,21 +147,21 @@ export type GetBoardByGroupQueryVariables = Exact<{
 }>;
 
 
-export type GetBoardByGroupQuery = { __typename?: 'Query', getBoardByGroup: Array<{ __typename: 'Board', id: string, name?: string | null, group?: { __typename: 'Group', id?: string | null } | null, state?: { __typename: 'BoardState', id: string, revision: number, createdAt: any, rows: Array<{ __typename: 'PersonTile', id: string, row: number, column: number, person: { __typename: 'Person', id: string, name?: string | null, qualifications?: Array<string | null> | null } } | null> } | null } | null> };
+export type GetBoardByGroupQuery = { __typename?: 'Query', getBoardByGroup: Array<{ __typename: 'Board', id: string, name?: string | null, group?: { __typename: 'Group', id?: string | null } | null, state?: { __typename: 'BoardState', id: string, revision: number, createdAt: any, rows: Array<{ __typename: 'PersonTile', id: string, row: number, column: number, person: { __typename: 'Person', id: string, name: string, qualifications: Array<string | null> } } | null> } | null } | null> };
 
 export type GetBoardByIdQueryVariables = Exact<{
   boardId: Scalars['String'];
 }>;
 
 
-export type GetBoardByIdQuery = { __typename?: 'Query', getBoardById?: { __typename: 'Board', id: string, name?: string | null, group?: { __typename: 'Group', id?: string | null } | null, state?: { __typename: 'BoardState', id: string, revision: number, createdAt: any, rows: Array<{ __typename: 'PersonTile', id: string, row: number, column: number, person: { __typename: 'Person', id: string, name?: string | null, qualifications?: Array<string | null> | null } } | null> } | null } | { __typename: 'NotFoundError', message?: string | null, notFoundTypename?: string | null, notFoundId?: string | null } | null };
+export type GetBoardByIdQuery = { __typename?: 'Query', getBoardById?: { __typename: 'Board', id: string, name?: string | null, group?: { __typename: 'Group', id?: string | null } | null, state?: { __typename: 'BoardState', id: string, revision: number, createdAt: any, rows: Array<{ __typename: 'PersonTile', id: string, row: number, column: number, person: { __typename: 'Person', id: string, name: string, qualifications: Array<string | null> } } | null> } | null } | { __typename: 'NotFoundError', message?: string | null, notFoundTypename?: string | null, notFoundId?: string | null } | null };
 
 export type WatchBoardSubscriptionVariables = Exact<{
   boardId: Scalars['String'];
 }>;
 
 
-export type WatchBoardSubscription = { __typename?: 'Subscription', watchBoard: { __typename: 'Board', id: string, name?: string | null, group?: { __typename: 'Group', id?: string | null } | null, state?: { __typename: 'BoardState', id: string, revision: number, createdAt: any, rows: Array<{ __typename: 'PersonTile', id: string, row: number, column: number, person: { __typename: 'Person', id: string, name?: string | null, qualifications?: Array<string | null> | null } } | null> } | null } };
+export type WatchBoardSubscription = { __typename?: 'Subscription', watchBoard: { __typename: 'Board', id: string, name?: string | null, group?: { __typename: 'Group', id?: string | null } | null, state?: { __typename: 'BoardState', id: string, revision: number, createdAt: any, rows: Array<{ __typename: 'PersonTile', id: string, row: number, column: number, person: { __typename: 'Person', id: string, name: string, qualifications: Array<string | null> } } | null> } | null } };
 
 export type MoveTileMutationVariables = Exact<{
   boardId: Scalars['ID'];
@@ -170,11 +170,11 @@ export type MoveTileMutationVariables = Exact<{
 }>;
 
 
-export type MoveTileMutation = { __typename?: 'Mutation', moveTile?: { __typename: 'MoveTileMutationResponse', boardState?: { __typename: 'BoardState', id: string, revision: number, createdAt: any, rows: Array<{ __typename: 'PersonTile', id: string, row: number, column: number, person: { __typename: 'Person', id: string, name?: string | null, qualifications?: Array<string | null> | null } } | null> } | null } | null };
+export type MoveTileMutation = { __typename?: 'Mutation', moveTile?: { __typename: 'MoveTileMutationResponse', boardState?: { __typename: 'BoardState', id: string, revision: number, createdAt: any, rows: Array<{ __typename: 'PersonTile', id: string, row: number, column: number, person: { __typename: 'Person', id: string, name: string, qualifications: Array<string | null> } } | null> } | null } | null };
 
-export type BoardPartsFragment = { __typename: 'Board', id: string, name?: string | null, group?: { __typename: 'Group', id?: string | null } | null, state?: { __typename: 'BoardState', id: string, revision: number, createdAt: any, rows: Array<{ __typename: 'PersonTile', id: string, row: number, column: number, person: { __typename: 'Person', id: string, name?: string | null, qualifications?: Array<string | null> | null } } | null> } | null };
+export type BoardPartsFragment = { __typename: 'Board', id: string, name?: string | null, group?: { __typename: 'Group', id?: string | null } | null, state?: { __typename: 'BoardState', id: string, revision: number, createdAt: any, rows: Array<{ __typename: 'PersonTile', id: string, row: number, column: number, person: { __typename: 'Person', id: string, name: string, qualifications: Array<string | null> } } | null> } | null };
 
-export type BoardStatePartsFragment = { __typename: 'BoardState', id: string, revision: number, createdAt: any, rows: Array<{ __typename: 'PersonTile', id: string, row: number, column: number, person: { __typename: 'Person', id: string, name?: string | null, qualifications?: Array<string | null> | null } } | null> };
+export type BoardStatePartsFragment = { __typename: 'BoardState', id: string, revision: number, createdAt: any, rows: Array<{ __typename: 'PersonTile', id: string, row: number, column: number, person: { __typename: 'Person', id: string, name: string, qualifications: Array<string | null> } } | null> };
 
 export const BoardStatePartsFragmentDoc = gql`
     fragment boardStateParts on BoardState {

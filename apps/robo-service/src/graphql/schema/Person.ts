@@ -4,8 +4,12 @@ export const Person = objectType({
   name: 'Person',
   definition(t) {
     t.nonNull.id('id');
-    t.string('name');
-    t.list.string('qualifications');
+    t.nonNull.string('name');
+    t.nonNull.list.string('qualifications', {
+      resolve: (root) => {
+        return root.qualifications ?? [];
+      },
+    });
     t.string('avatar');
   },
 });
