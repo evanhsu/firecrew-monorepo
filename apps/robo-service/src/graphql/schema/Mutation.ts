@@ -151,3 +151,84 @@ export const MoveTile = mutationField('moveTile', {
     };
   },
 });
+
+export const AddPersonToBoardMutationResponse = objectType({
+  name: 'AddPersonToBoardMutationResponse',
+  definition(t) {
+    t.field('boardState', {
+      type: BoardState,
+    });
+  },
+});
+export const CreatePersonInput = inputObjectType({
+  name: 'CreatePersonInput',
+  definition(t) {
+    t.nonNull.string('name', {
+      description:
+        "The full name of the Person you're adding (full names make it easier to tell people apart)",
+    });
+  },
+});
+
+// export const addExistingPersonToBoard = mutationField(
+//   'addExistingPersonToBoard',
+//   {
+//     type: AddPersonToBoardMutationResponse,
+//     args: {
+//       personId: nonNull(idArg()),
+//     },
+//     resolve: (root, args, ctx) => {},
+//   }
+// );
+export const createAndAddPersonToBoard = mutationField(
+  'createAndAddPersonToBoard',
+  {
+    type: AddPersonToBoardMutationResponse,
+    args: {
+      person: nonNull(
+        arg({
+          type: CreatePersonInput,
+        })
+      ),
+      boardId: nonNull(
+        idArg({
+          description: 'The ID of the Board to add this user to.',
+        })
+      ),
+    },
+    resolve: async (_root, args, ctx) => {
+      const newPerson = await ctx.services.personService.create({
+        name: args.person.name,
+      });
+
+      const oldBoardState = await ctx.db.boardState(args.boardId);
+      if (!oldBoardState) {
+        throw new Error(
+          "Can't find the previous BoardState, therefore can't derive the new BoardState..."
+        );
+      }
+
+      // The new row will be last on the board
+      const newRowIndex = oldBoardState.rows.length;
+
+      // TODO: use immutability-helper to avoid mutating the oldBoardState
+      oldBoardState.rows.push({
+        id: newPerson.id,
+        column: 0,
+        row: newRowIndex,
+        personId: newPerson.id,
+      });
+
+      const persistedBoardState = await ctx.db.setBoardState(
+        args.boardId,
+        oldBoardState
+      );
+
+      pubsub.publish('BOARD_UPDATED', { board: { boardId: args.boardId } });
+
+      return {
+        boardState: persistedBoardState,
+      };
+    },
+  }
+);

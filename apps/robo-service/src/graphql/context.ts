@@ -1,9 +1,11 @@
-import { db, Db } from '../database/db';
+import { db } from '../database/db';
+import { PersonService } from '../domain/person/personService';
 
-export interface Context {
-  db: Db;
-}
-
-export const context: Context = {
+export const context = {
   db,
+  services: {
+    personService: new PersonService(db),
+  },
 };
+
+export type Context = typeof context;

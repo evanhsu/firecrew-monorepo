@@ -17,6 +17,11 @@ export type Scalars = {
   DateTime: any;
 };
 
+export type AddPersonToBoardMutationResponse = {
+  __typename?: 'AddPersonToBoardMutationResponse';
+  boardState?: Maybe<BoardState>;
+};
+
 export type Board = {
   __typename?: 'Board';
   group?: Maybe<Group>;
@@ -38,6 +43,11 @@ export type BoardState = {
   /** The revision is an integer that's incremented every time the Board is updated (an "update" consists of a single Person being moved on the Board) */
   revision: Scalars['Int'];
   rows: Array<Maybe<PersonTile>>;
+};
+
+export type CreatePersonInput = {
+  /** The full name of the Person you're adding (full names make it easier to tell people apart) */
+  name: Scalars['String'];
 };
 
 export type Error = {
@@ -69,7 +79,14 @@ export type MoveTileMutationResponse = {
 
 export type Mutation = {
   __typename?: 'Mutation';
+  createAndAddPersonToBoard?: Maybe<AddPersonToBoardMutationResponse>;
   moveTile?: Maybe<MoveTileMutationResponse>;
+};
+
+
+export type MutationCreateAndAddPersonToBoardArgs = {
+  boardId: Scalars['ID'];
+  person: CreatePersonInput;
 };
 
 

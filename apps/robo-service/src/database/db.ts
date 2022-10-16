@@ -179,7 +179,12 @@ export type PersonModel = {
   name: string;
   qualifications?: string[];
   avatar?: string;
-  groupId: string;
+  groupId?: string; // Current crew membership? This will vary by year
+};
+
+export type CreatePersonInputModel = {
+  name: string;
+  qualifications?: string[];
 };
 
 type GridPosition = {
@@ -205,7 +210,9 @@ export type TileMoveEventInputModel = Omit<
 export interface Db {
   boards: (groupId: GroupModel['id']) => Promise<BoardModel[]>;
   board: (boardId: BoardModel['id']) => Promise<BoardModel | undefined>;
-  people: (id: PersonModel['id']) => Promise<PersonModel | undefined>;
+  person: (id: PersonModel['id']) => Promise<PersonModel | undefined>;
+  people: () => Promise<PersonModel[]>;
+  createPerson: (newPerson: CreatePersonInputModel) => Promise<PersonModel>;
   /**
    * Get a fully-hydrated boardState for the specified Board (including full Person documents)
    * If no revision is provided, the latest revision is selected.
@@ -233,8 +240,19 @@ export const db: Db = {
   board: async (boardId) => {
     return boards[boardId];
   },
-  people: async (personId) => {
+  person: async (personId) => {
     return people[personId];
+  },
+  people: async () => {
+    return Object.values(people);
+  },
+  createPerson: async (newPerson) => {
+    const newId = uuidv4();
+    people[newId] = {
+      ...newPerson,
+      id: newId,
+    };
+    return people[newId];
   },
   boardState: async (boardId, revision?) => {
     const allRevisionsForSpecifiedBoard = boardStates[boardId];

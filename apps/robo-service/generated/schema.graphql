@@ -2,6 +2,10 @@
 ### Do not make changes to this file directly
 
 
+type AddPersonToBoardMutationResponse {
+  boardState: BoardState
+}
+
 type Board {
   group: Group
   id: ID!
@@ -20,6 +24,13 @@ type BoardState {
   """
   revision: Int!
   rows: [PersonTile]!
+}
+
+input CreatePersonInput {
+  """
+  The full name of the Person you're adding (full names make it easier to tell people apart)
+  """
+  name: String!
 }
 
 """
@@ -58,6 +69,11 @@ type MoveTileMutationResponse {
 }
 
 type Mutation {
+  createAndAddPersonToBoard(
+    """The ID of the Board to add this user to."""
+    boardId: ID!
+    person: CreatePersonInput!
+  ): AddPersonToBoardMutationResponse
   moveTile(
     boardId: ID!
 

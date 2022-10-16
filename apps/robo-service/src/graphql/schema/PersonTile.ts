@@ -17,7 +17,8 @@ export const PersonTile = objectType({
     t.nonNull.field('person', {
       type: Person,
       resolve: async (root, _args, ctx) => {
-        const person = await ctx.db.people(root.personId);
+        const person = await ctx.services.personService.get(root.personId);
+
         if (!person) {
           throw new Error(
             `Couldn't find Person ${root.personId} for Row ${root.row}`

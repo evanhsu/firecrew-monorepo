@@ -15,6 +15,9 @@ declare global {
 }
 
 export interface NexusGenInputs {
+  CreatePersonInput: { // input type
+    name: string; // String!
+  }
   GridPositionInput: { // input type
     column: number; // Int!
     row: number; // Int!
@@ -38,6 +41,9 @@ export interface NexusGenScalars {
 }
 
 export interface NexusGenObjects {
+  AddPersonToBoardMutationResponse: { // root type
+    boardState?: NexusGenRootTypes['BoardState'] | null; // BoardState
+  }
   Board: db.BoardModel;
   BoardState: db.BoardStateModel;
   Group: db.GroupModel;
@@ -65,6 +71,9 @@ export type NexusGenRootTypes = NexusGenInterfaces & NexusGenObjects & NexusGenU
 export type NexusGenAllTypes = NexusGenRootTypes & NexusGenScalars
 
 export interface NexusGenFieldTypes {
+  AddPersonToBoardMutationResponse: { // field return type
+    boardState: NexusGenRootTypes['BoardState'] | null; // BoardState
+  }
   Board: { // field return type
     group: NexusGenRootTypes['Group'] | null; // Group
     id: string; // ID!
@@ -88,6 +97,7 @@ export interface NexusGenFieldTypes {
     boardState: NexusGenRootTypes['BoardState'] | null; // BoardState
   }
   Mutation: { // field return type
+    createAndAddPersonToBoard: NexusGenRootTypes['AddPersonToBoardMutationResponse'] | null; // AddPersonToBoardMutationResponse
     moveTile: NexusGenRootTypes['MoveTileMutationResponse'] | null; // MoveTileMutationResponse
   }
   NotFoundError: { // field return type
@@ -121,6 +131,9 @@ export interface NexusGenFieldTypes {
 }
 
 export interface NexusGenFieldTypeNames {
+  AddPersonToBoardMutationResponse: { // field return type name
+    boardState: 'BoardState'
+  }
   Board: { // field return type name
     group: 'Group'
     id: 'ID'
@@ -144,6 +157,7 @@ export interface NexusGenFieldTypeNames {
     boardState: 'BoardState'
   }
   Mutation: { // field return type name
+    createAndAddPersonToBoard: 'AddPersonToBoardMutationResponse'
     moveTile: 'MoveTileMutationResponse'
   }
   NotFoundError: { // field return type name
@@ -183,6 +197,10 @@ export interface NexusGenArgTypes {
     }
   }
   Mutation: {
+    createAndAddPersonToBoard: { // args
+      boardId: string; // ID!
+      person: NexusGenInputs['CreatePersonInput']; // CreatePersonInput!
+    }
     moveTile: { // args
       boardId: string; // ID!
       newPosition: NexusGenInputs['GridPositionInput']; // GridPositionInput!
