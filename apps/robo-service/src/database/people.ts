@@ -1,3 +1,5 @@
+import { PersonModel } from './db';
+
 export let person01 = {
   id: 'person-1-uuid',
   name: 'Albert Einstein',
@@ -33,7 +35,7 @@ export let person07 = {
   name: 'Gravy Train',
   groupId: 'group-1-uuid',
 };
-export let people = {
+export let people: Record<string, PersonModel> = {
   [person01.id]: person01,
   [person02.id]: person02,
   [person03.id]: person03,
