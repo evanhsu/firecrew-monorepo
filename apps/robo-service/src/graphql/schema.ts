@@ -1,6 +1,6 @@
 import { GraphQLDateTime } from 'graphql-scalars';
 import { makeSchema } from 'nexus';
-import { join } from 'path';
+import path, { join } from 'path';
 import * as SchemaTypes from './schema/index';
 
 /**
@@ -109,4 +109,5 @@ export const schema = makeSchema({
             },
         ],
     },
+    prettierConfig: path.join(__dirname, '../../../../.prettierrc'),
 });
