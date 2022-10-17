@@ -69,6 +69,11 @@ type MoveTileMutationResponse {
 }
 
 type Mutation {
+  addExistingPersonToBoard(
+    """The ID of the Board to add this user to."""
+    boardId: ID!
+    personId: ID!
+  ): AddPersonToBoardMutationResponse
   createAndAddPersonToBoard(
     """The ID of the Board to add this user to."""
     boardId: ID!
@@ -98,13 +103,23 @@ type Person {
   qualifications: [String]!
 }
 
-input PersonQueryFilterInput {
+input PersonQueryIncludeFilterInput {
+  """This string will be fuzzy-matched with Peoples' names"""
+  fuzzyName: String
   id: ID
 
   """
   Only people with this qualification will be returned. Example: `{ qualification: "ICT4" }`
   """
   qualification: String
+}
+
+input PersonQueryOmitFilterInput {
+  """Omit people who appear on this specific Rotation Board"""
+  boardId: ID
+
+  """Omit People with these specific IDs from the results"""
+  ids: [ID]
 }
 
 type PersonTile {
@@ -122,7 +137,7 @@ type PersonTile {
 type Query {
   getBoardByGroup(groupId: String!): [Board]!
   getBoardById(boardId: String!): GetBoardOutput
-  people(filter: PersonQueryFilterInput): [Person]
+  people(include: PersonQueryIncludeFilterInput, omit: PersonQueryOmitFilterInput): [Person]!
 }
 
 type Subscription {

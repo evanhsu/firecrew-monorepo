@@ -6,6 +6,7 @@ import {
   nonNull,
   objectType,
 } from 'nexus';
+import { BoardStateModel, db, PersonModel } from '../../database/db';
 import { pubsub } from '../../pubsub/pubsub';
 import { BoardState } from './BoardState';
 
@@ -170,16 +171,35 @@ export const CreatePersonInput = inputObjectType({
   },
 });
 
-// export const addExistingPersonToBoard = mutationField(
-//   'addExistingPersonToBoard',
-//   {
-//     type: AddPersonToBoardMutationResponse,
-//     args: {
-//       personId: nonNull(idArg()),
-//     },
-//     resolve: (root, args, ctx) => {},
-//   }
-// );
+export const addExistingPersonToBoard = mutationField(
+  'addExistingPersonToBoard',
+  {
+    type: AddPersonToBoardMutationResponse,
+    args: {
+      personId: nonNull(idArg()),
+      boardId: nonNull(
+        idArg({
+          description: 'The ID of the Board to add this user to.',
+        })
+      ),
+    },
+    resolve: async (root, args, ctx) => {
+      const persistedBoardState = await addPersonToEndOfBoard(
+        args.boardId,
+        args.personId,
+        ctx.db.boardState,
+        ctx.db.setBoardState
+      );
+
+      pubsub.publish('BOARD_UPDATED', { board: { boardId: args.boardId } });
+
+      return {
+        boardState: persistedBoardState,
+      };
+    },
+  }
+);
+
 export const createAndAddPersonToBoard = mutationField(
   'createAndAddPersonToBoard',
   {
@@ -201,27 +221,11 @@ export const createAndAddPersonToBoard = mutationField(
         name: args.person.name,
       });
 
-      const oldBoardState = await ctx.db.boardState(args.boardId);
-      if (!oldBoardState) {
-        throw new Error(
-          "Can't find the previous BoardState, therefore can't derive the new BoardState..."
-        );
-      }
-
-      // The new row will be last on the board
-      const newRowIndex = oldBoardState.rows.length;
-
-      // TODO: use immutability-helper to avoid mutating the oldBoardState
-      oldBoardState.rows.push({
-        id: newPerson.id,
-        column: 0,
-        row: newRowIndex,
-        personId: newPerson.id,
-      });
-
-      const persistedBoardState = await ctx.db.setBoardState(
+      const persistedBoardState = await addPersonToEndOfBoard(
         args.boardId,
-        oldBoardState
+        newPerson.id,
+        ctx.db.boardState,
+        ctx.db.setBoardState
       );
 
       pubsub.publish('BOARD_UPDATED', { board: { boardId: args.boardId } });
@@ -232,3 +236,32 @@ export const createAndAddPersonToBoard = mutationField(
     },
   }
 );
+
+const addPersonToEndOfBoard = async (
+  boardId: string,
+  personId: PersonModel['id'],
+  getBoardState: typeof db.boardState,
+  setBoardState: typeof db.setBoardState
+) => {
+  const oldBoardState = await getBoardState(boardId);
+  if (!oldBoardState) {
+    throw new Error(
+      "Can't find the previous BoardState, therefore can't derive the new BoardState..."
+    );
+  }
+
+  // The new row will be last on the board
+  const newRowIndex = oldBoardState.rows.length;
+
+  // TODO: use immutability-helper to avoid mutating the oldBoardState
+  oldBoardState.rows.push({
+    id: personId,
+    column: 0,
+    row: newRowIndex,
+    personId: personId,
+  });
+
+  const persistedBoardState = await setBoardState(boardId, oldBoardState);
+
+  return persistedBoardState;
+};

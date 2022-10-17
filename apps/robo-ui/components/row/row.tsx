@@ -10,7 +10,7 @@ export interface RowProps {
   index: number;
 }
 
-const StyledRow = styled.div({
+export const StyledRow = styled.div({
   display: 'flex',
   flexDirection: 'row',
   height: '75px',

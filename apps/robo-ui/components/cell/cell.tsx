@@ -23,7 +23,7 @@ export interface CellProps {
   column: number;
 }
 
-const StyledCell = styled.div({
+export const StyledCell = styled.div({
   width: '300px',
   display: 'flex',
   backgroundColor: theme.colors.white,

@@ -68,3 +68,30 @@ fragment boardStateParts on BoardState {
     }
   }
 }
+
+query findPersonByName($fuzzyName: String!, $omitPeopleOnBoard: ID) {
+  people(
+    include: { fuzzyName: $fuzzyName }
+    omit: { boardId: $omitPeopleOnBoard }
+  ) {
+    id
+    name
+    qualifications
+  }
+}
+
+mutation CreateAndAddPersonToBoard($person: CreatePersonInput!, $boardId: ID!) {
+  createAndAddPersonToBoard(person: $person, boardId: $boardId) {
+    boardState {
+      ...boardStateParts
+    }
+  }
+}
+
+mutation AddExistingPersonToBoard($personId: ID!, $boardId: ID!) {
+  addExistingPersonToBoard(personId: $personId, boardId: $boardId) {
+    boardState {
+      ...boardStateParts
+    }
+  }
+}

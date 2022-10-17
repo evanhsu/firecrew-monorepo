@@ -12,7 +12,7 @@ export interface TileProps {
   };
 }
 
-const StyledTile = styled('div')<{ opacity: number }>(
+export const StyledTile = styled('div')<{ opacity: number }>(
   {
     // border: 3px solid ${theme.colors.dark},
     boxShadow: `1px 2px 3px ${theme.colors.dark}`,

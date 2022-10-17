@@ -35,6 +35,16 @@ export let person07 = {
   name: 'Gravy Train',
   groupId: 'group-1-uuid',
 };
+export let person08 = {
+  id: 'person-8-uuid',
+  name: 'Helen Hunt',
+  groupId: 'group-1-uuid',
+};
+export let person09 = {
+  id: 'person-9-uuid',
+  name: 'Iovko Margaritov',
+  groupId: 'group-1-uuid',
+};
 export let people: Record<string, PersonModel> = {
   [person01.id]: person01,
   [person02.id]: person02,
@@ -43,4 +53,6 @@ export let people: Record<string, PersonModel> = {
   [person05.id]: person05,
   [person06.id]: person06,
   [person07.id]: person07,
+  [person08.id]: person08,
+  [person09.id]: person09,
 };

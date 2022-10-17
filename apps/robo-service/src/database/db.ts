@@ -8,6 +8,8 @@ import {
   person05,
   person06,
   person07,
+  person08,
+  person09,
 } from './people';
 
 let group1: GroupModel = {

@@ -4,6 +4,7 @@ import {
   Board as BoardType,
   BoardStatePartsFragment,
 } from '@firecrew/robo-service-client';
+import AddTileForm from '../add-tile-form/add-tile-form';
 import HeaderRow from '../header-row/header-row';
 import Row from '../row/row';
 
@@ -71,6 +72,8 @@ const renderBoard = (
     ) : (
       <div>This Board is empty</div>
     )}
+
+    <AddTileForm boardId={board.id} />
   </div>
 );
 

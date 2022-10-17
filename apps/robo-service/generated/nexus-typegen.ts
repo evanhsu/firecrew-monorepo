@@ -22,9 +22,14 @@ export interface NexusGenInputs {
     column: number; // Int!
     row: number; // Int!
   }
-  PersonQueryFilterInput: { // input type
+  PersonQueryIncludeFilterInput: { // input type
+    fuzzyName?: string | null; // String
     id?: string | null; // ID
     qualification?: string | null; // String
+  }
+  PersonQueryOmitFilterInput: { // input type
+    boardId?: string | null; // ID
+    ids?: Array<string | null> | null; // [ID]
   }
 }
 
@@ -97,6 +102,7 @@ export interface NexusGenFieldTypes {
     boardState: NexusGenRootTypes['BoardState'] | null; // BoardState
   }
   Mutation: { // field return type
+    addExistingPersonToBoard: NexusGenRootTypes['AddPersonToBoardMutationResponse'] | null; // AddPersonToBoardMutationResponse
     createAndAddPersonToBoard: NexusGenRootTypes['AddPersonToBoardMutationResponse'] | null; // AddPersonToBoardMutationResponse
     moveTile: NexusGenRootTypes['MoveTileMutationResponse'] | null; // MoveTileMutationResponse
   }
@@ -120,7 +126,7 @@ export interface NexusGenFieldTypes {
   Query: { // field return type
     getBoardByGroup: Array<NexusGenRootTypes['Board'] | null>; // [Board]!
     getBoardById: NexusGenRootTypes['GetBoardOutput'] | null; // GetBoardOutput
-    people: Array<NexusGenRootTypes['Person'] | null> | null; // [Person]
+    people: Array<NexusGenRootTypes['Person'] | null>; // [Person]!
   }
   Subscription: { // field return type
     watchBoard: NexusGenRootTypes['Board']; // Board!
@@ -157,6 +163,7 @@ export interface NexusGenFieldTypeNames {
     boardState: 'BoardState'
   }
   Mutation: { // field return type name
+    addExistingPersonToBoard: 'AddPersonToBoardMutationResponse'
     createAndAddPersonToBoard: 'AddPersonToBoardMutationResponse'
     moveTile: 'MoveTileMutationResponse'
   }
@@ -197,6 +204,10 @@ export interface NexusGenArgTypes {
     }
   }
   Mutation: {
+    addExistingPersonToBoard: { // args
+      boardId: string; // ID!
+      personId: string; // ID!
+    }
     createAndAddPersonToBoard: { // args
       boardId: string; // ID!
       person: NexusGenInputs['CreatePersonInput']; // CreatePersonInput!
@@ -215,7 +226,8 @@ export interface NexusGenArgTypes {
       boardId: string; // String!
     }
     people: { // args
-      filter?: NexusGenInputs['PersonQueryFilterInput'] | null; // PersonQueryFilterInput
+      include?: NexusGenInputs['PersonQueryIncludeFilterInput'] | null; // PersonQueryIncludeFilterInput
+      omit?: NexusGenInputs['PersonQueryOmitFilterInput'] | null; // PersonQueryOmitFilterInput
     }
   }
   Subscription: {
