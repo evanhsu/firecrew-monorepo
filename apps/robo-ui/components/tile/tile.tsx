@@ -1,6 +1,6 @@
-import styled from '@emotion/styled';
+import { styled } from '@mui/material/styles';
 import { useDrag } from 'react-dnd';
-import theme from '../../theme';
+import palette from '../../theme/palette';
 
 export interface TileProps {
   primaryText: string;
@@ -13,29 +13,29 @@ export interface TileProps {
 }
 
 export const StyledTile = styled('div')<{ opacity: number }>(
-  {
+  ({ theme, opacity }) => ({
     // border: 3px solid ${theme.colors.dark},
-    boxShadow: `1px 2px 3px ${theme.colors.dark}`,
+    boxShadow: `1px 2px 3px ${palette.dark.main}`,
     flex: 1,
-    backgroundColor: theme.colors.primary,
+    backgroundColor: theme.palette.primary.main,
     display: 'flex',
     flexDirection: 'column',
-  },
-  (props) => ({
-    opacity: props.opacity ?? 1.0,
+    padding: 5,
+    opacity: opacity ?? 1.0,
   })
 );
 
-const PrimaryText = styled.span`
-    fontSize: "20px",
-    flex: 1,
-    color: Theme.colors.accent,
-`;
-const SecondaryText = styled.span`
-    fontSize: "15px",
-    flex: 1,
-    color: Theme.colors.accent,
-`;
+const PrimaryText = styled('span')(({ theme }) => ({
+  fontSize: '20px',
+  flex: 1,
+  color: theme.palette.primary.contrastText,
+}));
+
+const SecondaryText = styled('span')(({ theme }) => ({
+  fontSize: '15px',
+  flex: 1,
+  color: theme.palette.primary.contrastText,
+}));
 
 export function Tile(props: TileProps) {
   const { primaryText, secondaryText, id, position } = props;

@@ -1,16 +1,15 @@
 import { gql } from '@apollo/client';
-import styled from '@emotion/styled';
 import {
   GetBoardByGroupDocument,
   GetBoardByGroupQueryResult,
   GridPositionInput,
   useMoveTileMutation,
 } from '@firecrew/robo-service-client';
+import { styled } from '@mui/material/styles';
 import { RefObject, useRef } from 'react';
 import { DropTargetMonitor, useDrop } from 'react-dnd';
 import { v4 as uuidv4 } from 'uuid';
 import { apolloCache } from '../../apollo/cache';
-import theme from '../../theme';
 import { moveTileOnGrid, overlapIsSufficient } from '../../utils/utils';
 import Tile, { TileProps } from '../tile/tile';
 
@@ -23,15 +22,15 @@ export interface CellProps {
   column: number;
 }
 
-export const StyledCell = styled.div({
+export const StyledCell = styled('div')(({ theme }) => ({
   width: '300px',
   display: 'flex',
-  backgroundColor: theme.colors.white,
+  backgroundColor: theme.palette.secondary.contrastText,
   paddingTop: '2px',
   paddingBottom: '2px',
   marginLeft: '2px',
   marginRight: '2px',
-});
+}));
 
 interface Positionable {
   position: GridPositionInput;

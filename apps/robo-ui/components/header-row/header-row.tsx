@@ -1,27 +1,26 @@
-import styled from '@emotion/styled';
-import theme from '../../theme';
+import { styled } from '@mui/material/styles';
 
 export interface HeaderRowProps {
   headers?: string[];
 }
 
-const StyledHeaderRow = styled.div({
+const StyledHeaderRow = styled('div')(({ theme }) => ({
   display: 'flex',
   flexDirection: 'row',
   height: '75px',
-});
+}));
 
-const StyledColumnHeader = styled.div({
+const StyledColumnHeader = styled('div')(({ theme }) => ({
   display: 'flex',
   flexDirection: 'column',
   opacity: 1,
-  backgroundColor: theme.colors.accent,
+  backgroundColor: theme.palette.secondary.contrastText,
   fontSize: '30px',
-  color: theme.colors.white,
+  color: theme.palette.secondary.main,
   width: '300px',
   marginLeft: '2px',
   marginRight: '2px',
-});
+}));
 
 const defaultProps = {
   headers: ['Available', 'Unavailable', 'Committed'],

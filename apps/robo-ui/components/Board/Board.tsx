@@ -65,7 +65,6 @@ const renderBoard = (
   boardRows: JSX.Element[]
 ) => (
   <div>
-    <h1>{board.name}</h1>
     <HeaderRow headers={headers} />
     {boardRows.length > 0 ? (
       <StyledBoard>{boardRows}</StyledBoard>
