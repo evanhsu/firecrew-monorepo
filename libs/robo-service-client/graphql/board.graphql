@@ -1,97 +1,97 @@
 query getBoardByGroup($groupId: String!) {
-  getBoardByGroup(groupId: $groupId) {
-    ...boardParts
-  }
+    getBoardByGroup(groupId: $groupId) {
+        ...boardParts
+    }
 }
 
 query getBoardById($boardId: String!) {
-  getBoardById(boardId: $boardId) {
-    ... on Board {
-      ...boardParts
+    getBoardById(boardId: $boardId) {
+        ... on Board {
+            ...boardParts
+        }
+        ... on NotFoundError {
+            message
+            notFoundTypename
+            notFoundId
+            __typename
+        }
     }
-    ... on NotFoundError {
-      message
-      notFoundTypename
-      notFoundId
-      __typename
-    }
-  }
 }
 
 subscription watchBoard($boardId: String!) {
-  watchBoard(boardId: $boardId) {
-    ...boardParts
-  }
+    watchBoard(boardId: $boardId) {
+        ...boardParts
+    }
 }
 
 mutation moveTile(
-  $boardId: ID!
-  $tileId: ID!
-  $newPosition: GridPositionInput!
+    $boardId: ID!
+    $tileId: ID!
+    $newPosition: GridPositionInput!
 ) {
-  moveTile(boardId: $boardId, tileId: $tileId, newPosition: $newPosition) {
-    __typename
-    boardState {
-      ...boardStateParts
+    moveTile(boardId: $boardId, tileId: $tileId, newPosition: $newPosition) {
+        __typename
+        boardState {
+            ...boardStateParts
+        }
     }
-  }
 }
 
 fragment boardParts on Board {
-  __typename
-  id
-  group {
     __typename
     id
-  }
-  name
-  state {
-    ...boardStateParts
-  }
+    group {
+        __typename
+        id
+    }
+    name
+    state {
+        ...boardStateParts
+    }
 }
 
 fragment boardStateParts on BoardState {
-  __typename
-  id
-  revision
-  createdAt
-  rows {
     __typename
     id
-    row
-    column
-    person {
-      __typename
-      id
-      name
-      qualifications
+    revision
+    createdAt
+    rows {
+        __typename
+        id
+        row
+        column
+        person {
+            __typename
+            id
+            name
+            qualifications
+        }
     }
-  }
 }
 
 query findPersonByName($fuzzyName: String!, $omitPeopleOnBoard: ID) {
-  people(
-    include: { fuzzyName: $fuzzyName }
-    omit: { boardId: $omitPeopleOnBoard }
-  ) {
-    id
-    name
-    qualifications
-  }
+    people(
+        include: { fuzzyName: $fuzzyName }
+        omit: { boardId: $omitPeopleOnBoard }
+    ) {
+        id
+        name
+        qualifications
+    }
 }
 
 mutation CreateAndAddPersonToBoard($person: CreatePersonInput!, $boardId: ID!) {
-  createAndAddPersonToBoard(person: $person, boardId: $boardId) {
-    boardState {
-      ...boardStateParts
+    createAndAddPersonToBoard(person: $person, boardId: $boardId) {
+        boardState {
+            ...boardStateParts
+        }
     }
-  }
 }
 
 mutation AddExistingPersonToBoard($personId: ID!, $boardId: ID!) {
-  addExistingPersonToBoard(personId: $personId, boardId: $boardId) {
-    boardState {
-      ...boardStateParts
+    addExistingPersonToBoard(personId: $personId, boardId: $boardId) {
+        boardState {
+            ...boardStateParts
+        }
     }
-  }
 }

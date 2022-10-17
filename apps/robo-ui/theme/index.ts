@@ -3,7 +3,7 @@ import palette from './palette';
 import layout from './layout';
 
 export const theme: ThemeOptions = {
-  palette,
+    palette,
 };
 
 export { layout };

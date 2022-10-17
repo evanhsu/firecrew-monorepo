@@ -4,8 +4,8 @@ import { context } from './graphql/context';
 import { schema } from './graphql/schema';
 
 import {
-  ApolloServerPluginDrainHttpServer,
-  ApolloServerPluginLandingPageLocalDefault,
+    ApolloServerPluginDrainHttpServer,
+    ApolloServerPluginLandingPageLocalDefault,
 } from 'apollo-server-core';
 import express from 'express';
 import { useServer } from 'graphql-ws/lib/use/ws';
@@ -17,8 +17,8 @@ const httpServer = createServer(app);
 
 // Create the WebSocket server
 const wsServer = new WebSocketServer({
-  server: httpServer,
-  path: '/graphql',
+    server: httpServer,
+    path: '/graphql',
 });
 
 /**
@@ -29,13 +29,13 @@ const wsServer = new WebSocketServer({
  * WebSocket server _separately_ from the HTTP Server.
  */
 const serverCleanup = useServer(
-  {
-    schema,
-    context: (ctx, msg, args) => {
-      return context;
+    {
+        schema,
+        context: (ctx, msg, args) => {
+            return context;
+        },
     },
-  },
-  wsServer
+    wsServer
 );
 
 /**
@@ -43,46 +43,46 @@ const serverCleanup = useServer(
  * https://www.apollographql.com/docs/apollo-server/v3/data/subscriptions
  */
 export const server = new ApolloServer({
-  /**
-   * Note that the schema and context definitions here ONLY apply to
-   * inbound requests to the HTTP server - the websocket server is configured
-   * separately (above). Any changes to schema/context probably need to be made
-   * in both places.
-   */
-  schema,
-  context: async () => {
-    return context;
-  },
-  csrfPrevention: true,
-  cache: 'bounded',
-  plugins: [
-    // Proper shutdown for the HTTP server.
-    ApolloServerPluginDrainHttpServer({ httpServer }),
-
-    // Proper shutdown for the WebSocket server.
-    {
-      async serverWillStart() {
-        return {
-          async drainServer() {
-            await serverCleanup.dispose();
-          },
-        };
-      },
+    /**
+     * Note that the schema and context definitions here ONLY apply to
+     * inbound requests to the HTTP server - the websocket server is configured
+     * separately (above). Any changes to schema/context probably need to be made
+     * in both places.
+     */
+    schema,
+    context: async () => {
+        return context;
     },
-    ApolloServerPluginLandingPageLocalDefault({ embed: true }),
-    // ApolloServerPluginLandingPageGraphQLPlayground,
-  ],
+    csrfPrevention: true,
+    cache: 'bounded',
+    plugins: [
+        // Proper shutdown for the HTTP server.
+        ApolloServerPluginDrainHttpServer({ httpServer }),
+
+        // Proper shutdown for the WebSocket server.
+        {
+            async serverWillStart() {
+                return {
+                    async drainServer() {
+                        await serverCleanup.dispose();
+                    },
+                };
+            },
+        },
+        ApolloServerPluginLandingPageLocalDefault({ embed: true }),
+        // ApolloServerPluginLandingPageGraphQLPlayground,
+    ],
 });
 
 export const startServer = async (port: number = 4000) => {
-  await server.start();
-  server.applyMiddleware({ app });
+    await server.start();
+    server.applyMiddleware({ app });
 
-  httpServer.listen(port, () => {
-    console.log(
-      `Server is now running on http://localhost:${port}${server.graphqlPath}`
-    );
-  });
+    httpServer.listen(port, () => {
+        console.log(
+            `Server is now running on http://localhost:${port}${server.graphqlPath}`
+        );
+    });
 
-  return httpServer;
+    return httpServer;
 };

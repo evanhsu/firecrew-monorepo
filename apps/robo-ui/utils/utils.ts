@@ -1,6 +1,6 @@
 import {
-  BoardStatePartsFragment,
-  GridPositionInput,
+    BoardStatePartsFragment,
+    GridPositionInput,
 } from '@firecrew/robo-service-client';
 import update from 'immutability-helper';
 import { RefObject } from 'react';
@@ -17,82 +17,82 @@ import { DropTargetMonitor } from 'react-dnd';
 export const isSSR = () => typeof window === 'undefined';
 
 export const coordinatesAreEqual = (
-  position1: GridPositionInput,
-  position2: GridPositionInput
+    position1: GridPositionInput,
+    position2: GridPositionInput
 ): boolean => {
-  return (
-    position1.row === position2.row && position1.column === position2.column
-  );
+    return (
+        position1.row === position2.row && position1.column === position2.column
+    );
 };
 
 export const overlapIsSufficient = (
-  startPosition: GridPositionInput,
-  hoverPosition: GridPositionInput,
-  ref: RefObject<HTMLDivElement>,
-  monitor: DropTargetMonitor
+    startPosition: GridPositionInput,
+    hoverPosition: GridPositionInput,
+    ref: RefObject<HTMLDivElement>,
+    monitor: DropTargetMonitor
 ) => {
-  // Don't replace items with themselves
-  if (coordinatesAreEqual(startPosition, hoverPosition)) {
-    return false;
-  }
-  if (!ref.current) {
-    return false;
-  }
-  // Determine rectangle on screen
-  const hoverBoundingRect = ref.current?.getBoundingClientRect();
+    // Don't replace items with themselves
+    if (coordinatesAreEqual(startPosition, hoverPosition)) {
+        return false;
+    }
+    if (!ref.current) {
+        return false;
+    }
+    // Determine rectangle on screen
+    const hoverBoundingRect = ref.current?.getBoundingClientRect();
 
-  // Get vertical middle
-  const hoverMiddleY = (hoverBoundingRect.bottom - hoverBoundingRect.top) / 2;
-  const hoverUpperQuarterY =
-    (hoverBoundingRect.bottom - hoverBoundingRect.top) / 4;
-  const hoverLowerQuarterY = hoverUpperQuarterY * 3;
+    // Get vertical middle
+    const hoverMiddleY = (hoverBoundingRect.bottom - hoverBoundingRect.top) / 2;
+    const hoverUpperQuarterY =
+        (hoverBoundingRect.bottom - hoverBoundingRect.top) / 4;
+    const hoverLowerQuarterY = hoverUpperQuarterY * 3;
 
-  // Determine mouse position
-  const clientOffset = monitor.getClientOffset();
+    // Determine mouse position
+    const clientOffset = monitor.getClientOffset();
 
-  // Get pixels to the top
-  const hoverClientY = clientOffset!.y - hoverBoundingRect.top;
+    // Get pixels to the top
+    const hoverClientY = clientOffset!.y - hoverBoundingRect.top;
 
-  // Only perform the move when the mouse has crossed half of the items height
-  // When dragging downwards, only move when the cursor is below 50%
-  // When dragging upwards, only move when the cursor is above 50%
+    // Only perform the move when the mouse has crossed half of the items height
+    // When dragging downwards, only move when the cursor is below 50%
+    // When dragging upwards, only move when the cursor is above 50%
 
-  // Dragging downwards
-  if (
-    startPosition.row < hoverPosition.row &&
-    hoverClientY < hoverUpperQuarterY
-  ) {
-    return false;
-  }
+    // Dragging downwards
+    if (
+        startPosition.row < hoverPosition.row &&
+        hoverClientY < hoverUpperQuarterY
+    ) {
+        return false;
+    }
 
-  // Dragging upwards
-  if (
-    startPosition.row > hoverPosition.row &&
-    hoverClientY > hoverLowerQuarterY
-  ) {
-    return false;
-  }
+    // Dragging upwards
+    if (
+        startPosition.row > hoverPosition.row &&
+        hoverClientY > hoverLowerQuarterY
+    ) {
+        return false;
+    }
 
-  return true;
+    return true;
 };
 
 export const moveTileOnGrid = (
-  rows: BoardStatePartsFragment['rows'],
-  oldPosition: GridPositionInput,
-  newPosition: GridPositionInput
+    rows: BoardStatePartsFragment['rows'],
+    oldPosition: GridPositionInput,
+    newPosition: GridPositionInput
 ) => {
-  const rowToBeMoved = { ...rows[oldPosition.row] };
-  rowToBeMoved!.column = newPosition.column;
-  const postMoveRows = update(rows, {
-    // @ts-ignore
-    $splice: [
-      [oldPosition.row, 1],
-      [newPosition.row, 0, rowToBeMoved],
-    ],
-  }).map((row, i) => ({
-    ...row,
-    row: i,
-  }));
+    const rowToBeMoved = { ...rows[oldPosition.row] };
+    rowToBeMoved!.column = newPosition.column;
+    const postMoveRows = update(rows, {
+        // @ts-ignore
+        $splice: [
+            [oldPosition.row, 1],
+            [newPosition.row, 0, rowToBeMoved],
+        ],
+    }).map((row, i) => ({
+        ...row,
+        row: i,
+    }));
 
-  return postMoveRows;
+    return postMoveRows;
 };

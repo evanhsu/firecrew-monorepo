@@ -1,62 +1,64 @@
 {
-  "name": "robo-service-client",
-  "$schema": "../../node_modules/nx/schemas/project-schema.json",
-  "sourceRoot": "libs/robo-service-client/src",
-  "projectType": "library",
-  "tags": [],
-  "targets": {
-    "build": {
-      "executor": "@nrwl/web:rollup",
-      "outputs": ["{options.outputPath}"],
-      "options": {
-        "outputPath": "dist/libs/robo-service-client",
-        "tsConfig": "libs/robo-service-client/tsconfig.lib.json",
-        "project": "libs/robo-service-client/package.json",
-        "entryFile": "libs/robo-service-client/src/index.ts",
-        "external": ["react/jsx-runtime"],
-        "rollupConfig": "@nrwl/react/plugins/bundle-rollup",
-        "compiler": "swc",
-        "assets": [
-          {
-            "glob": "libs/robo-service-client/README.md",
-            "input": ".",
-            "output": "."
-          }
-        ]
-      }
-    },
-    "generate-gql": {
-      "executor": "nx:run-commands",
-      "options": {
-        "command": "npx graphql-codegen --config libs/robo-service-client/codegen.yml",
-        "outputPath": "apps/api/src/generated"
-      },
-      "configurations": {
+    "name": "robo-service-client",
+    "$schema": "../../node_modules/nx/schemas/project-schema.json",
+    "sourceRoot": "libs/robo-service-client/src",
+    "projectType": "library",
+    "tags": [],
+    "targets": {
+        "build": {
+            "executor": "@nrwl/web:rollup",
+            "outputs": ["{options.outputPath}"],
+            "options": {
+                "outputPath": "dist/libs/robo-service-client",
+                "tsConfig": "libs/robo-service-client/tsconfig.lib.json",
+                "project": "libs/robo-service-client/package.json",
+                "entryFile": "libs/robo-service-client/src/index.ts",
+                "external": ["react/jsx-runtime"],
+                "rollupConfig": "@nrwl/react/plugins/bundle-rollup",
+                "compiler": "swc",
+                "assets": [
+                    {
+                        "glob": "libs/robo-service-client/README.md",
+                        "input": ".",
+                        "output": "."
+                    }
+                ]
+            }
+        },
+        "generate-gql": {
+            "executor": "nx:run-commands",
+            "options": {
+                "command": "npx graphql-codegen --config libs/robo-service-client/codegen.yml",
+                "outputPath": "apps/api/src/generated"
+            },
+            "configurations": {
+                "watch": {
+                    "command": "npx graphql-codegen --watch --config libs/robo-service-client/codegen.yml"
+                }
+            }
+        },
         "watch": {
-          "command": "npx graphql-codegen --watch --config libs/robo-service-client/codegen.yml"
+            "executor": "nx:run-commands",
+            "options": {
+                "command": "nx run robo-service-client:generate-gql:watch"
+            }
+        },
+        "lint": {
+            "executor": "@nrwl/linter:eslint",
+            "outputs": ["{options.outputFile}"],
+            "options": {
+                "lintFilePatterns": [
+                    "libs/robo-service-client/**/*.{ts,tsx,js,jsx}"
+                ]
+            }
+        },
+        "test": {
+            "executor": "@nrwl/jest:jest",
+            "outputs": ["coverage/libs/robo-service-client"],
+            "options": {
+                "jestConfig": "libs/robo-service-client/jest.config.ts",
+                "passWithNoTests": true
+            }
         }
-      }
-    },
-    "watch": {
-      "executor": "nx:run-commands",
-      "options": {
-        "command": "nx run robo-service-client:generate-gql:watch"
-      }
-    },
-    "lint": {
-      "executor": "@nrwl/linter:eslint",
-      "outputs": ["{options.outputFile}"],
-      "options": {
-        "lintFilePatterns": ["libs/robo-service-client/**/*.{ts,tsx,js,jsx}"]
-      }
-    },
-    "test": {
-      "executor": "@nrwl/jest:jest",
-      "outputs": ["coverage/libs/robo-service-client"],
-      "options": {
-        "jestConfig": "libs/robo-service-client/jest.config.ts",
-        "passWithNoTests": true
-      }
     }
-  }
 }

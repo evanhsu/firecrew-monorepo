@@ -1,16 +1,16 @@
 {
-  "configurations": [
-    {
-      "name": "Attach debugger to robo-service",
-      "type": "node",
-      "request": "attach",
-      "port": 9229,
-      "smartStep": true,
-      "restart": true,
-      "skipFiles": [
-        "<node_internals>/**",
-        "${workspaceFolder}/**/node_modules/**/*.js"
-      ]
-    }
-  ]
+    "configurations": [
+        {
+            "name": "Attach debugger to robo-service",
+            "type": "node",
+            "request": "attach",
+            "port": 9229,
+            "smartStep": true,
+            "restart": true,
+            "skipFiles": [
+                "<node_internals>/**",
+                "${workspaceFolder}/**/node_modules/**/*.js"
+            ]
+        }
+    ]
 }

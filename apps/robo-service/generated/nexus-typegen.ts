@@ -3,247 +3,289 @@
  * Do not make changes to this file directly
  */
 
-import type * as db from "./../src/database/db"
-import type * as errors from "./../src/errors/errors"
-import type { Context } from "./../src/graphql/context"
-
-
-
+import type * as db from './../src/database/db';
+import type * as errors from './../src/errors/errors';
+import type { Context } from './../src/graphql/context';
 
 declare global {
-  interface NexusGen extends NexusGenTypes {}
+    interface NexusGen extends NexusGenTypes {}
 }
 
 export interface NexusGenInputs {
-  CreatePersonInput: { // input type
-    name: string; // String!
-  }
-  GridPositionInput: { // input type
-    column: number; // Int!
-    row: number; // Int!
-  }
-  PersonQueryIncludeFilterInput: { // input type
-    fuzzyName?: string | null; // String
-    id?: string | null; // ID
-    qualification?: string | null; // String
-  }
-  PersonQueryOmitFilterInput: { // input type
-    boardId?: string | null; // ID
-    ids?: Array<string | null> | null; // [ID]
-  }
+    CreatePersonInput: {
+        // input type
+        name: string; // String!
+    };
+    GridPositionInput: {
+        // input type
+        column: number; // Int!
+        row: number; // Int!
+    };
+    PersonQueryIncludeFilterInput: {
+        // input type
+        fuzzyName?: string | null; // String
+        id?: string | null; // ID
+        qualification?: string | null; // String
+    };
+    PersonQueryOmitFilterInput: {
+        // input type
+        boardId?: string | null; // ID
+        ids?: Array<string | null> | null; // [ID]
+    };
 }
 
-export interface NexusGenEnums {
-}
+export interface NexusGenEnums {}
 
 export interface NexusGenScalars {
-  String: string
-  Int: number
-  Float: number
-  Boolean: boolean
-  ID: string
-  DateTime: any
+    String: string;
+    Int: number;
+    Float: number;
+    Boolean: boolean;
+    ID: string;
+    DateTime: any;
 }
 
 export interface NexusGenObjects {
-  AddPersonToBoardMutationResponse: { // root type
-    boardState?: NexusGenRootTypes['BoardState'] | null; // BoardState
-  }
-  Board: db.BoardModel;
-  BoardState: db.BoardStateModel;
-  Group: db.GroupModel;
-  MoveTileMutationResponse: { // root type
-    boardState?: NexusGenRootTypes['BoardState'] | null; // BoardState
-  }
-  Mutation: {};
-  NotFoundError: errors.NotFoundError;
-  Person: db.PersonModel;
-  PersonTile: db.PersonTileModel;
-  Query: {};
-  Subscription: {};
+    AddPersonToBoardMutationResponse: {
+        // root type
+        boardState?: NexusGenRootTypes['BoardState'] | null; // BoardState
+    };
+    Board: db.BoardModel;
+    BoardState: db.BoardStateModel;
+    Group: db.GroupModel;
+    MoveTileMutationResponse: {
+        // root type
+        boardState?: NexusGenRootTypes['BoardState'] | null; // BoardState
+    };
+    Mutation: {};
+    NotFoundError: errors.NotFoundError;
+    Person: db.PersonModel;
+    PersonTile: db.PersonTileModel;
+    Query: {};
+    Subscription: {};
 }
 
 export interface NexusGenInterfaces {
-  Error: NexusGenRootTypes['NotFoundError'];
+    Error: NexusGenRootTypes['NotFoundError'];
 }
 
 export interface NexusGenUnions {
-  GetBoardOutput: NexusGenRootTypes['Board'] | NexusGenRootTypes['NotFoundError'];
+    GetBoardOutput:
+        | NexusGenRootTypes['Board']
+        | NexusGenRootTypes['NotFoundError'];
 }
 
-export type NexusGenRootTypes = NexusGenInterfaces & NexusGenObjects & NexusGenUnions
+export type NexusGenRootTypes = NexusGenInterfaces &
+    NexusGenObjects &
+    NexusGenUnions;
 
-export type NexusGenAllTypes = NexusGenRootTypes & NexusGenScalars
+export type NexusGenAllTypes = NexusGenRootTypes & NexusGenScalars;
 
 export interface NexusGenFieldTypes {
-  AddPersonToBoardMutationResponse: { // field return type
-    boardState: NexusGenRootTypes['BoardState'] | null; // BoardState
-  }
-  Board: { // field return type
-    group: NexusGenRootTypes['Group'] | null; // Group
-    id: string; // ID!
-    name: string | null; // String
-    state: NexusGenRootTypes['BoardState'] | null; // BoardState
-  }
-  BoardState: { // field return type
-    board: NexusGenRootTypes['Board']; // Board!
-    createdAt: NexusGenScalars['DateTime']; // DateTime!
-    id: string; // ID!
-    revision: number; // Int!
-    rows: Array<NexusGenRootTypes['PersonTile'] | null>; // [PersonTile]!
-  }
-  Group: { // field return type
-    board: NexusGenRootTypes['Board'] | null; // Board
-    id: string | null; // ID
-    members: Array<NexusGenRootTypes['Person'] | null> | null; // [Person]
-    name: string | null; // String
-  }
-  MoveTileMutationResponse: { // field return type
-    boardState: NexusGenRootTypes['BoardState'] | null; // BoardState
-  }
-  Mutation: { // field return type
-    addExistingPersonToBoard: NexusGenRootTypes['AddPersonToBoardMutationResponse'] | null; // AddPersonToBoardMutationResponse
-    createAndAddPersonToBoard: NexusGenRootTypes['AddPersonToBoardMutationResponse'] | null; // AddPersonToBoardMutationResponse
-    moveTile: NexusGenRootTypes['MoveTileMutationResponse'] | null; // MoveTileMutationResponse
-  }
-  NotFoundError: { // field return type
-    message: string | null; // String
-    notFoundId: string | null; // String
-    notFoundTypename: string | null; // String
-  }
-  Person: { // field return type
-    avatar: string | null; // String
-    id: string; // ID!
-    name: string; // String!
-    qualifications: Array<string | null>; // [String]!
-  }
-  PersonTile: { // field return type
-    column: number; // Int!
-    id: string; // ID!
-    person: NexusGenRootTypes['Person']; // Person!
-    row: number; // Int!
-  }
-  Query: { // field return type
-    getBoardByGroup: Array<NexusGenRootTypes['Board'] | null>; // [Board]!
-    getBoardById: NexusGenRootTypes['GetBoardOutput'] | null; // GetBoardOutput
-    people: Array<NexusGenRootTypes['Person'] | null>; // [Person]!
-  }
-  Subscription: { // field return type
-    watchBoard: NexusGenRootTypes['Board']; // Board!
-  }
-  Error: { // field return type
-    message: string | null; // String
-  }
+    AddPersonToBoardMutationResponse: {
+        // field return type
+        boardState: NexusGenRootTypes['BoardState'] | null; // BoardState
+    };
+    Board: {
+        // field return type
+        group: NexusGenRootTypes['Group'] | null; // Group
+        id: string; // ID!
+        name: string | null; // String
+        state: NexusGenRootTypes['BoardState'] | null; // BoardState
+    };
+    BoardState: {
+        // field return type
+        board: NexusGenRootTypes['Board']; // Board!
+        createdAt: NexusGenScalars['DateTime']; // DateTime!
+        id: string; // ID!
+        revision: number; // Int!
+        rows: Array<NexusGenRootTypes['PersonTile'] | null>; // [PersonTile]!
+    };
+    Group: {
+        // field return type
+        board: NexusGenRootTypes['Board'] | null; // Board
+        id: string | null; // ID
+        members: Array<NexusGenRootTypes['Person'] | null> | null; // [Person]
+        name: string | null; // String
+    };
+    MoveTileMutationResponse: {
+        // field return type
+        boardState: NexusGenRootTypes['BoardState'] | null; // BoardState
+    };
+    Mutation: {
+        // field return type
+        addExistingPersonToBoard:
+            | NexusGenRootTypes['AddPersonToBoardMutationResponse']
+            | null; // AddPersonToBoardMutationResponse
+        createAndAddPersonToBoard:
+            | NexusGenRootTypes['AddPersonToBoardMutationResponse']
+            | null; // AddPersonToBoardMutationResponse
+        moveTile: NexusGenRootTypes['MoveTileMutationResponse'] | null; // MoveTileMutationResponse
+    };
+    NotFoundError: {
+        // field return type
+        message: string | null; // String
+        notFoundId: string | null; // String
+        notFoundTypename: string | null; // String
+    };
+    Person: {
+        // field return type
+        avatar: string | null; // String
+        id: string; // ID!
+        name: string; // String!
+        qualifications: Array<string | null>; // [String]!
+    };
+    PersonTile: {
+        // field return type
+        column: number; // Int!
+        id: string; // ID!
+        person: NexusGenRootTypes['Person']; // Person!
+        row: number; // Int!
+    };
+    Query: {
+        // field return type
+        getBoardByGroup: Array<NexusGenRootTypes['Board'] | null>; // [Board]!
+        getBoardById: NexusGenRootTypes['GetBoardOutput'] | null; // GetBoardOutput
+        people: Array<NexusGenRootTypes['Person'] | null>; // [Person]!
+    };
+    Subscription: {
+        // field return type
+        watchBoard: NexusGenRootTypes['Board']; // Board!
+    };
+    Error: {
+        // field return type
+        message: string | null; // String
+    };
 }
 
 export interface NexusGenFieldTypeNames {
-  AddPersonToBoardMutationResponse: { // field return type name
-    boardState: 'BoardState'
-  }
-  Board: { // field return type name
-    group: 'Group'
-    id: 'ID'
-    name: 'String'
-    state: 'BoardState'
-  }
-  BoardState: { // field return type name
-    board: 'Board'
-    createdAt: 'DateTime'
-    id: 'ID'
-    revision: 'Int'
-    rows: 'PersonTile'
-  }
-  Group: { // field return type name
-    board: 'Board'
-    id: 'ID'
-    members: 'Person'
-    name: 'String'
-  }
-  MoveTileMutationResponse: { // field return type name
-    boardState: 'BoardState'
-  }
-  Mutation: { // field return type name
-    addExistingPersonToBoard: 'AddPersonToBoardMutationResponse'
-    createAndAddPersonToBoard: 'AddPersonToBoardMutationResponse'
-    moveTile: 'MoveTileMutationResponse'
-  }
-  NotFoundError: { // field return type name
-    message: 'String'
-    notFoundId: 'String'
-    notFoundTypename: 'String'
-  }
-  Person: { // field return type name
-    avatar: 'String'
-    id: 'ID'
-    name: 'String'
-    qualifications: 'String'
-  }
-  PersonTile: { // field return type name
-    column: 'Int'
-    id: 'ID'
-    person: 'Person'
-    row: 'Int'
-  }
-  Query: { // field return type name
-    getBoardByGroup: 'Board'
-    getBoardById: 'GetBoardOutput'
-    people: 'Person'
-  }
-  Subscription: { // field return type name
-    watchBoard: 'Board'
-  }
-  Error: { // field return type name
-    message: 'String'
-  }
+    AddPersonToBoardMutationResponse: {
+        // field return type name
+        boardState: 'BoardState';
+    };
+    Board: {
+        // field return type name
+        group: 'Group';
+        id: 'ID';
+        name: 'String';
+        state: 'BoardState';
+    };
+    BoardState: {
+        // field return type name
+        board: 'Board';
+        createdAt: 'DateTime';
+        id: 'ID';
+        revision: 'Int';
+        rows: 'PersonTile';
+    };
+    Group: {
+        // field return type name
+        board: 'Board';
+        id: 'ID';
+        members: 'Person';
+        name: 'String';
+    };
+    MoveTileMutationResponse: {
+        // field return type name
+        boardState: 'BoardState';
+    };
+    Mutation: {
+        // field return type name
+        addExistingPersonToBoard: 'AddPersonToBoardMutationResponse';
+        createAndAddPersonToBoard: 'AddPersonToBoardMutationResponse';
+        moveTile: 'MoveTileMutationResponse';
+    };
+    NotFoundError: {
+        // field return type name
+        message: 'String';
+        notFoundId: 'String';
+        notFoundTypename: 'String';
+    };
+    Person: {
+        // field return type name
+        avatar: 'String';
+        id: 'ID';
+        name: 'String';
+        qualifications: 'String';
+    };
+    PersonTile: {
+        // field return type name
+        column: 'Int';
+        id: 'ID';
+        person: 'Person';
+        row: 'Int';
+    };
+    Query: {
+        // field return type name
+        getBoardByGroup: 'Board';
+        getBoardById: 'GetBoardOutput';
+        people: 'Person';
+    };
+    Subscription: {
+        // field return type name
+        watchBoard: 'Board';
+    };
+    Error: {
+        // field return type name
+        message: 'String';
+    };
 }
 
 export interface NexusGenArgTypes {
-  Board: {
-    state: { // args
-      revision?: number | null; // Int
-    }
-  }
-  Mutation: {
-    addExistingPersonToBoard: { // args
-      boardId: string; // ID!
-      personId: string; // ID!
-    }
-    createAndAddPersonToBoard: { // args
-      boardId: string; // ID!
-      person: NexusGenInputs['CreatePersonInput']; // CreatePersonInput!
-    }
-    moveTile: { // args
-      boardId: string; // ID!
-      newPosition: NexusGenInputs['GridPositionInput']; // GridPositionInput!
-      tileId: string; // ID!
-    }
-  }
-  Query: {
-    getBoardByGroup: { // args
-      groupId: string; // String!
-    }
-    getBoardById: { // args
-      boardId: string; // String!
-    }
-    people: { // args
-      include?: NexusGenInputs['PersonQueryIncludeFilterInput'] | null; // PersonQueryIncludeFilterInput
-      omit?: NexusGenInputs['PersonQueryOmitFilterInput'] | null; // PersonQueryOmitFilterInput
-    }
-  }
-  Subscription: {
-    watchBoard: { // args
-      boardId: string; // String!
-    }
-  }
+    Board: {
+        state: {
+            // args
+            revision?: number | null; // Int
+        };
+    };
+    Mutation: {
+        addExistingPersonToBoard: {
+            // args
+            boardId: string; // ID!
+            personId: string; // ID!
+        };
+        createAndAddPersonToBoard: {
+            // args
+            boardId: string; // ID!
+            person: NexusGenInputs['CreatePersonInput']; // CreatePersonInput!
+        };
+        moveTile: {
+            // args
+            boardId: string; // ID!
+            newPosition: NexusGenInputs['GridPositionInput']; // GridPositionInput!
+            tileId: string; // ID!
+        };
+    };
+    Query: {
+        getBoardByGroup: {
+            // args
+            groupId: string; // String!
+        };
+        getBoardById: {
+            // args
+            boardId: string; // String!
+        };
+        people: {
+            // args
+            include?: NexusGenInputs['PersonQueryIncludeFilterInput'] | null; // PersonQueryIncludeFilterInput
+            omit?: NexusGenInputs['PersonQueryOmitFilterInput'] | null; // PersonQueryOmitFilterInput
+        };
+    };
+    Subscription: {
+        watchBoard: {
+            // args
+            boardId: string; // String!
+        };
+    };
 }
 
 export interface NexusGenAbstractTypeMembers {
-  GetBoardOutput: "Board" | "NotFoundError"
-  Error: "NotFoundError"
+    GetBoardOutput: 'Board' | 'NotFoundError';
+    Error: 'NotFoundError';
 }
 
 export interface NexusGenTypeInterfaces {
-  NotFoundError: "Error"
+    NotFoundError: 'Error';
 }
 
 export type NexusGenObjectNames = keyof NexusGenObjects;
@@ -260,54 +302,67 @@ export type NexusGenUnionNames = keyof NexusGenUnions;
 
 export type NexusGenObjectsUsingAbstractStrategyIsTypeOf = never;
 
-export type NexusGenAbstractsUsingStrategyResolveType = "Error" | "GetBoardOutput";
+export type NexusGenAbstractsUsingStrategyResolveType =
+    | 'Error'
+    | 'GetBoardOutput';
 
 export type NexusGenFeaturesConfig = {
-  abstractTypeStrategies: {
-    isTypeOf: false
-    resolveType: true
-    __typename: false
-  }
-}
+    abstractTypeStrategies: {
+        isTypeOf: false;
+        resolveType: true;
+        __typename: false;
+    };
+};
 
 export interface NexusGenTypes {
-  context: Context;
-  inputTypes: NexusGenInputs;
-  rootTypes: NexusGenRootTypes;
-  inputTypeShapes: NexusGenInputs & NexusGenEnums & NexusGenScalars;
-  argTypes: NexusGenArgTypes;
-  fieldTypes: NexusGenFieldTypes;
-  fieldTypeNames: NexusGenFieldTypeNames;
-  allTypes: NexusGenAllTypes;
-  typeInterfaces: NexusGenTypeInterfaces;
-  objectNames: NexusGenObjectNames;
-  inputNames: NexusGenInputNames;
-  enumNames: NexusGenEnumNames;
-  interfaceNames: NexusGenInterfaceNames;
-  scalarNames: NexusGenScalarNames;
-  unionNames: NexusGenUnionNames;
-  allInputTypes: NexusGenTypes['inputNames'] | NexusGenTypes['enumNames'] | NexusGenTypes['scalarNames'];
-  allOutputTypes: NexusGenTypes['objectNames'] | NexusGenTypes['enumNames'] | NexusGenTypes['unionNames'] | NexusGenTypes['interfaceNames'] | NexusGenTypes['scalarNames'];
-  allNamedTypes: NexusGenTypes['allInputTypes'] | NexusGenTypes['allOutputTypes']
-  abstractTypes: NexusGenTypes['interfaceNames'] | NexusGenTypes['unionNames'];
-  abstractTypeMembers: NexusGenAbstractTypeMembers;
-  objectsUsingAbstractStrategyIsTypeOf: NexusGenObjectsUsingAbstractStrategyIsTypeOf;
-  abstractsUsingStrategyResolveType: NexusGenAbstractsUsingStrategyResolveType;
-  features: NexusGenFeaturesConfig;
+    context: Context;
+    inputTypes: NexusGenInputs;
+    rootTypes: NexusGenRootTypes;
+    inputTypeShapes: NexusGenInputs & NexusGenEnums & NexusGenScalars;
+    argTypes: NexusGenArgTypes;
+    fieldTypes: NexusGenFieldTypes;
+    fieldTypeNames: NexusGenFieldTypeNames;
+    allTypes: NexusGenAllTypes;
+    typeInterfaces: NexusGenTypeInterfaces;
+    objectNames: NexusGenObjectNames;
+    inputNames: NexusGenInputNames;
+    enumNames: NexusGenEnumNames;
+    interfaceNames: NexusGenInterfaceNames;
+    scalarNames: NexusGenScalarNames;
+    unionNames: NexusGenUnionNames;
+    allInputTypes:
+        | NexusGenTypes['inputNames']
+        | NexusGenTypes['enumNames']
+        | NexusGenTypes['scalarNames'];
+    allOutputTypes:
+        | NexusGenTypes['objectNames']
+        | NexusGenTypes['enumNames']
+        | NexusGenTypes['unionNames']
+        | NexusGenTypes['interfaceNames']
+        | NexusGenTypes['scalarNames'];
+    allNamedTypes:
+        | NexusGenTypes['allInputTypes']
+        | NexusGenTypes['allOutputTypes'];
+    abstractTypes:
+        | NexusGenTypes['interfaceNames']
+        | NexusGenTypes['unionNames'];
+    abstractTypeMembers: NexusGenAbstractTypeMembers;
+    objectsUsingAbstractStrategyIsTypeOf: NexusGenObjectsUsingAbstractStrategyIsTypeOf;
+    abstractsUsingStrategyResolveType: NexusGenAbstractsUsingStrategyResolveType;
+    features: NexusGenFeaturesConfig;
 }
 
-
 declare global {
-  interface NexusGenPluginTypeConfig<TypeName extends string> {
-  }
-  interface NexusGenPluginInputTypeConfig<TypeName extends string> {
-  }
-  interface NexusGenPluginFieldConfig<TypeName extends string, FieldName extends string> {
-  }
-  interface NexusGenPluginInputFieldConfig<TypeName extends string, FieldName extends string> {
-  }
-  interface NexusGenPluginSchemaConfig {
-  }
-  interface NexusGenPluginArgConfig {
-  }
+    interface NexusGenPluginTypeConfig<TypeName extends string> {}
+    interface NexusGenPluginInputTypeConfig<TypeName extends string> {}
+    interface NexusGenPluginFieldConfig<
+        TypeName extends string,
+        FieldName extends string
+    > {}
+    interface NexusGenPluginInputFieldConfig<
+        TypeName extends string,
+        FieldName extends string
+    > {}
+    interface NexusGenPluginSchemaConfig {}
+    interface NexusGenPluginArgConfig {}
 }

@@ -1,70 +1,70 @@
 {
-  "name": "robo-ui",
-  "$schema": "../../node_modules/nx/schemas/project-schema.json",
-  "sourceRoot": "apps/robo-ui",
-  "projectType": "application",
-  "targets": {
-    "build": {
-      "executor": "@nrwl/next:build",
-      "outputs": ["{options.outputPath}"],
-      "defaultConfiguration": "production",
-      "options": {
-        "root": "apps/robo-ui",
-        "outputPath": "dist/apps/robo-ui"
-      },
-      "configurations": {
-        "development": {
-          "outputPath": "apps/robo-ui"
+    "name": "robo-ui",
+    "$schema": "../../node_modules/nx/schemas/project-schema.json",
+    "sourceRoot": "apps/robo-ui",
+    "projectType": "application",
+    "targets": {
+        "build": {
+            "executor": "@nrwl/next:build",
+            "outputs": ["{options.outputPath}"],
+            "defaultConfiguration": "production",
+            "options": {
+                "root": "apps/robo-ui",
+                "outputPath": "dist/apps/robo-ui"
+            },
+            "configurations": {
+                "development": {
+                    "outputPath": "apps/robo-ui"
+                },
+                "production": {}
+            }
         },
-        "production": {}
-      }
-    },
-    "serve": {
-      "executor": "@nrwl/next:server",
-      "defaultConfiguration": "development",
-      "options": {
-        "buildTarget": "robo-ui:build",
-        "dev": true
-      },
-      "configurations": {
-        "development": {
-          "buildTarget": "robo-ui:build:development",
-          "dev": true,
-          "hostname": "192.168.50.42"
+        "serve": {
+            "executor": "@nrwl/next:server",
+            "defaultConfiguration": "development",
+            "options": {
+                "buildTarget": "robo-ui:build",
+                "dev": true
+            },
+            "configurations": {
+                "development": {
+                    "buildTarget": "robo-ui:build:development",
+                    "dev": true,
+                    "hostname": "192.168.50.42"
+                },
+                "production": {
+                    "buildTarget": "robo-ui:build:production",
+                    "dev": false
+                }
+            }
         },
-        "production": {
-          "buildTarget": "robo-ui:build:production",
-          "dev": false
+        "watch": {
+            "executor": "nx:run-commands",
+            "options": {
+                "command": "nx run robo-ui:serve:development"
+            }
+        },
+        "export": {
+            "executor": "@nrwl/next:export",
+            "options": {
+                "buildTarget": "robo-ui:build:production"
+            }
+        },
+        "test": {
+            "executor": "@nrwl/jest:jest",
+            "outputs": ["coverage/apps/robo-ui"],
+            "options": {
+                "jestConfig": "apps/robo-ui/jest.config.ts",
+                "passWithNoTests": true
+            }
+        },
+        "lint": {
+            "executor": "@nrwl/linter:eslint",
+            "outputs": ["{options.outputFile}"],
+            "options": {
+                "lintFilePatterns": ["apps/robo-ui/**/*.{ts,tsx,js,jsx}"]
+            }
         }
-      }
     },
-    "watch": {
-      "executor": "nx:run-commands",
-      "options": {
-        "command": "nx run robo-ui:serve:development"
-      }
-    },
-    "export": {
-      "executor": "@nrwl/next:export",
-      "options": {
-        "buildTarget": "robo-ui:build:production"
-      }
-    },
-    "test": {
-      "executor": "@nrwl/jest:jest",
-      "outputs": ["coverage/apps/robo-ui"],
-      "options": {
-        "jestConfig": "apps/robo-ui/jest.config.ts",
-        "passWithNoTests": true
-      }
-    },
-    "lint": {
-      "executor": "@nrwl/linter:eslint",
-      "outputs": ["{options.outputFile}"],
-      "options": {
-        "lintFilePatterns": ["apps/robo-ui/**/*.{ts,tsx,js,jsx}"]
-      }
-    }
-  },
-  "tags": []
+    "tags": []
 }

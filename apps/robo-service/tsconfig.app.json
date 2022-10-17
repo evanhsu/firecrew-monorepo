@@ -1,14 +1,14 @@
 {
-  "extends": "./tsconfig.json",
-  "compilerOptions": {
-    "composite": true,
-    "declaration": true,
-    "declarationMap": true,
-    "esModuleInterop": true,
-    "outDir": "../../dist/out-tsc",
-    "module": "commonjs",
-    "types": ["node"]
-  },
-  "exclude": ["jest.config.ts", "**/*.spec.ts", "**/*.test.ts"],
-  "include": ["**/*.ts"]
+    "extends": "./tsconfig.json",
+    "compilerOptions": {
+        "composite": true,
+        "declaration": true,
+        "declarationMap": true,
+        "esModuleInterop": true,
+        "outDir": "../../dist/out-tsc",
+        "module": "commonjs",
+        "types": ["node"]
+    },
+    "exclude": ["jest.config.ts", "**/*.spec.ts", "**/*.test.ts"],
+    "include": ["**/*.ts"]
 }

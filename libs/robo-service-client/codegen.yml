@@ -1,9 +1,9 @@
 overwrite: true
 schema: 'apps/robo-service/generated/schema.graphql'
 generates:
-  libs/robo-service-client/src/index.tsx:
-    documents: 'libs/robo-service-client/graphql/**/*.graphql'
-    plugins:
-      - typescript
-      - typescript-operations
-      - typescript-react-apollo
+    libs/robo-service-client/src/index.tsx:
+        documents: 'libs/robo-service-client/graphql/**/*.graphql'
+        plugins:
+            - typescript
+            - typescript-operations
+            - typescript-react-apollo
