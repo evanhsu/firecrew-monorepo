@@ -13,9 +13,15 @@ const StyledHeaderRow = styled('div')(({ theme }) => ({
 const StyledColumnHeader = styled('div')(({ theme }) => ({
     display: 'flex',
     flexDirection: 'column',
+    overflowX: 'hidden',
     opacity: 1,
     backgroundColor: theme.palette.secondary.contrastText,
-    fontSize: '30px',
+    textAlign: 'center',
+    fontSize: '1.2em',
+    fontWeight: 700,
+    [theme.breakpoints.up('sm')]: {
+        fontSize: '2em',
+    },
     color: theme.palette.secondary.main,
     width: '300px',
     marginLeft: '2px',

@@ -11,8 +11,9 @@ import Typography from '@mui/material/Typography';
 import { useState } from 'react';
 import { layout } from '../../theme';
 import { LeftNav } from '../left-nav/left-nav';
+import themeOptions from '../../theme';
 
-const theme = createTheme();
+const theme = createTheme(themeOptions);
 
 type LayoutProps = {
     children?: React.ReactNode;
@@ -40,7 +41,7 @@ const AppBar = styled(MuiAppBar, {
 }));
 
 export const Layout = (props: LayoutProps) => {
-    const [open, setOpen] = useState(true);
+    const [open, setOpen] = useState(false);
     const toggleDrawer = () => {
         setOpen(!open);
     };
