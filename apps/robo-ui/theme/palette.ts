@@ -1,5 +1,4 @@
 // Green minty theme
-// eslint-disable-next-line
 const minty = {
     primary: { main: '#5CDB95' },
     secondary: { main: '#8EE4AF' },
@@ -19,3 +18,4 @@ const sophisticated = {
 };
 
 export default sophisticated;
+// export default minty;

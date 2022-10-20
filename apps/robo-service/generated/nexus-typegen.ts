@@ -62,6 +62,10 @@ export interface NexusGenObjects {
     Person: db.PersonModel;
     PersonTile: db.PersonTileModel;
     Query: {};
+    RemovePersonFromBoardMutationResponse: {
+        // root type
+        boardState?: NexusGenRootTypes['BoardState'] | null; // BoardState
+    };
     Subscription: {};
 }
 
@@ -121,6 +125,9 @@ export interface NexusGenFieldTypes {
             | NexusGenRootTypes['AddPersonToBoardMutationResponse']
             | null; // AddPersonToBoardMutationResponse
         moveTile: NexusGenRootTypes['MoveTileMutationResponse'] | null; // MoveTileMutationResponse
+        removePersonFromBoard:
+            | NexusGenRootTypes['RemovePersonFromBoardMutationResponse']
+            | null; // RemovePersonFromBoardMutationResponse
     };
     NotFoundError: {
         // field return type
@@ -147,6 +154,10 @@ export interface NexusGenFieldTypes {
         getBoardByGroup: Array<NexusGenRootTypes['Board'] | null>; // [Board]!
         getBoardById: NexusGenRootTypes['GetBoardOutput'] | null; // GetBoardOutput
         people: Array<NexusGenRootTypes['Person'] | null>; // [Person]!
+    };
+    RemovePersonFromBoardMutationResponse: {
+        // field return type
+        boardState: NexusGenRootTypes['BoardState'] | null; // BoardState
     };
     Subscription: {
         // field return type
@@ -194,6 +205,7 @@ export interface NexusGenFieldTypeNames {
         addExistingPersonToBoard: 'AddPersonToBoardMutationResponse';
         createAndAddPersonToBoard: 'AddPersonToBoardMutationResponse';
         moveTile: 'MoveTileMutationResponse';
+        removePersonFromBoard: 'RemovePersonFromBoardMutationResponse';
     };
     NotFoundError: {
         // field return type name
@@ -220,6 +232,10 @@ export interface NexusGenFieldTypeNames {
         getBoardByGroup: 'Board';
         getBoardById: 'GetBoardOutput';
         people: 'Person';
+    };
+    RemovePersonFromBoardMutationResponse: {
+        // field return type name
+        boardState: 'BoardState';
     };
     Subscription: {
         // field return type name
@@ -254,6 +270,11 @@ export interface NexusGenArgTypes {
             boardId: string; // ID!
             newPosition: NexusGenInputs['GridPositionInput']; // GridPositionInput!
             tileId: string; // ID!
+        };
+        removePersonFromBoard: {
+            // args
+            boardId: string; // ID!
+            personId: string; // ID!
         };
     };
     Query: {

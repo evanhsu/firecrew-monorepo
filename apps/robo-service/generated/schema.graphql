@@ -94,6 +94,21 @@ type Mutation {
         newPosition: GridPositionInput!
         tileId: ID!
     ): MoveTileMutationResponse
+
+    """
+    Remove a Person from a Board. The Person's crew roster membership will not be affected
+    """
+    removePersonFromBoard(
+        """
+        The ID of the Board to add this user to.
+        """
+        boardId: ID!
+
+        """
+        The ID of the person to remove from the Board
+        """
+        personId: ID!
+    ): RemovePersonFromBoardMutationResponse
 }
 
 type NotFoundError implements Error {
@@ -155,6 +170,10 @@ type Query {
         include: PersonQueryIncludeFilterInput
         omit: PersonQueryOmitFilterInput
     ): [Person]!
+}
+
+type RemovePersonFromBoardMutationResponse {
+    boardState: BoardState
 }
 
 type Subscription {

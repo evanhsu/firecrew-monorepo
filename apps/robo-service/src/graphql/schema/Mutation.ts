@@ -5,8 +5,14 @@ import {
     mutationField,
     nonNull,
     objectType,
+    stringArg,
 } from 'nexus';
-import { BoardStateModel, db, PersonModel } from '../../database/db';
+import {
+    BoardModel,
+    BoardStateModel,
+    db,
+    PersonModel,
+} from '../../database/db';
 import { pubsub } from '../../pubsub/pubsub';
 import { BoardState } from './BoardState';
 
@@ -63,7 +69,7 @@ export const GridPositionInput = inputObjectType({
     },
 });
 
-export const MoveTile = mutationField('moveTile', {
+export const moveTile = mutationField('moveTile', {
     type: MoveTileMutationResponse,
     args: {
         boardId: nonNull(idArg()),
@@ -244,7 +250,7 @@ export const createAndAddPersonToBoard = mutationField(
 );
 
 const addPersonToEndOfBoard = async (
-    boardId: string,
+    boardId: BoardModel['id'],
     personId: PersonModel['id'],
     getBoardState: typeof db.boardState,
     setBoardState: typeof db.setBoardState
@@ -268,6 +274,76 @@ const addPersonToEndOfBoard = async (
     });
 
     const persistedBoardState = await setBoardState(boardId, oldBoardState);
+
+    return persistedBoardState;
+};
+
+export const RemovePersonFromBoardMutationResponse = objectType({
+    name: 'RemovePersonFromBoardMutationResponse',
+    definition(t) {
+        t.field('boardState', {
+            type: BoardState,
+        });
+    },
+});
+
+export const removePersonFromBoardMutation = mutationField(
+    'removePersonFromBoard',
+    {
+        type: RemovePersonFromBoardMutationResponse,
+        description:
+            "Remove a Person from a Board. The Person's crew roster membership will not be affected",
+        args: {
+            personId: nonNull(
+                idArg({
+                    description:
+                        'The ID of the person to remove from the Board',
+                })
+            ),
+            boardId: nonNull(
+                idArg({
+                    description: 'The ID of the Board to add this user to.',
+                })
+            ),
+        },
+        resolve: async (_root, args, ctx) => {
+            const persistedBoardState = await removePersonFromBoard(
+                args.boardId,
+                args.personId,
+                ctx.db.boardState,
+                ctx.db.setBoardState
+            );
+
+            pubsub.publish('BOARD_UPDATED', {
+                board: { boardId: args.boardId },
+            });
+
+            return {
+                boardState: persistedBoardState,
+            };
+        },
+    }
+);
+
+const removePersonFromBoard = async (
+    boardId: BoardModel['id'],
+    personId: PersonModel['id'],
+    getBoardState: typeof db.boardState,
+    setBoardState: typeof db.setBoardState
+) => {
+    const oldBoardState = await getBoardState(boardId);
+    if (!oldBoardState) {
+        throw new Error(
+            "Can't find the previous BoardState, therefore can't derive the new BoardState..."
+        );
+    }
+
+    const newBoardState = {
+        boardId: oldBoardState.id,
+        rows: oldBoardState.rows.filter((row) => row.personId !== personId),
+    };
+
+    const persistedBoardState = await setBoardState(boardId, newBoardState);
 
     return persistedBoardState;
 };

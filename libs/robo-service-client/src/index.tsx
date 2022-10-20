@@ -82,6 +82,8 @@ export type Mutation = {
   addExistingPersonToBoard?: Maybe<AddPersonToBoardMutationResponse>;
   createAndAddPersonToBoard?: Maybe<AddPersonToBoardMutationResponse>;
   moveTile?: Maybe<MoveTileMutationResponse>;
+  /** Remove a Person from a Board. The Person's crew roster membership will not be affected */
+  removePersonFromBoard?: Maybe<RemovePersonFromBoardMutationResponse>;
 };
 
 
@@ -101,6 +103,12 @@ export type MutationMoveTileArgs = {
   boardId: Scalars['ID'];
   newPosition: GridPositionInput;
   tileId: Scalars['ID'];
+};
+
+
+export type MutationRemovePersonFromBoardArgs = {
+  boardId: Scalars['ID'];
+  personId: Scalars['ID'];
 };
 
 export type NotFoundError = Error & {
@@ -164,6 +172,11 @@ export type QueryGetBoardByIdArgs = {
 export type QueryPeopleArgs = {
   include?: InputMaybe<PersonQueryIncludeFilterInput>;
   omit?: InputMaybe<PersonQueryOmitFilterInput>;
+};
+
+export type RemovePersonFromBoardMutationResponse = {
+  __typename?: 'RemovePersonFromBoardMutationResponse';
+  boardState?: Maybe<BoardState>;
 };
 
 export type Subscription = {
