@@ -1,7 +1,14 @@
 import { useEffect, useState } from 'react';
 
-export function useDeviceTouchscreenDetector(): boolean {
-    const [hasTouchScreen, setHasTouchScreen] = useState(false);
+/**
+ * Detects whether the frontend client is using a touchscreen or not.
+ *
+ * @returns true if a touchscreen is detected
+ *          false if no touchscreen is detected
+ *          null while detection is in-progress (for about 10ms when invoked)
+ */
+export function useDeviceTouchscreenDetector(): boolean | null {
+    const [hasTouchScreen, setHasTouchScreen] = useState<boolean | null>(null);
 
     useEffect(() => {
         let hasTouchScreen = false;
