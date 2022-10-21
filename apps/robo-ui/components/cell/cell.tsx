@@ -149,7 +149,7 @@ export function Cell(props: CellProps) {
         },
         drop(item, monitor) {
             console.log(
-                `DROPPED at (${item.position.row}, ${item.position.column})`
+                `DROPPED at (${item.position?.row}, ${item.position?.column})`
             );
 
             moveTileMutation({

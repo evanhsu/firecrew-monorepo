@@ -3,20 +3,12 @@ import {
     useGetBoardByGroupQuery,
     WatchBoardDocument,
     WatchBoardSubscription,
-    WatchBoardSubscriptionResult,
 } from '@firecrew/robo-service-client';
 import { useEffect } from 'react';
-import { DndProvider } from 'react-dnd';
-import { HTML5Backend } from 'react-dnd-html5-backend';
-import { TouchBackend } from 'react-dnd-touch-backend';
 import BoardComponent from '../../components/board/board';
 
 /* eslint-disable-next-line */
 export interface BoardProps {}
-
-const StyledBoard = styled.div`
-    color: pink;
-`;
 
 export function Board(props: BoardProps) {
     const { data, loading, error, subscribeToMore } = useGetBoardByGroupQuery({

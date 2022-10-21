@@ -2,6 +2,7 @@ import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import DashboardIcon from '@mui/icons-material/Dashboard';
 import PersonAddIcon from '@mui/icons-material/PersonAdd';
 import PersonRemoveIcon from '@mui/icons-material/PersonRemove';
+import { Box } from '@mui/material';
 import Divider from '@mui/material/Divider';
 import MuiDrawer, { DrawerProps as MuiDrawerProps } from '@mui/material/Drawer';
 import IconButton from '@mui/material/IconButton';
@@ -12,6 +13,7 @@ import ListItemText from '@mui/material/ListItemText';
 import { styled } from '@mui/material/styles';
 import Toolbar from '@mui/material/Toolbar';
 import { layout } from '../../theme';
+import DeleteZone from '../delete-zone/delete-zone';
 
 type LeftNavProps = MuiDrawerProps & {
     toggleOpen: () => void;
@@ -79,9 +81,18 @@ export const LeftNav = (props: LeftNavProps) => {
                     </ListItemIcon>
                     <ListItemText primary="Remove People" />
                 </ListItemButton>
-                {/* <Divider sx={{ my: 1 }} /> */}
-                {/* {secondaryListItems} */}
             </List>
+            <Divider sx={{ my: 1 }} />
+            <Box
+                sx={{
+                    display: 'flex',
+                    flexGrow: 1,
+                    flexDirection: 'row',
+                    alignItems: 'flex-end',
+                }}
+            >
+                <DeleteZone />
+            </Box>
         </Drawer>
     );
 };

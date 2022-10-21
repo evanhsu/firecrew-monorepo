@@ -247,6 +247,14 @@ export type AddExistingPersonToBoardMutationVariables = Exact<{
 
 export type AddExistingPersonToBoardMutation = { __typename?: 'Mutation', addExistingPersonToBoard?: { __typename?: 'AddPersonToBoardMutationResponse', boardState?: { __typename: 'BoardState', id: string, revision: number, createdAt: any, rows: Array<{ __typename: 'PersonTile', id: string, row: number, column: number, person: { __typename: 'Person', id: string, name: string, qualifications: Array<string | null> } } | null> } | null } | null };
 
+export type RemovePersonFromBoardMutationVariables = Exact<{
+  personId: Scalars['ID'];
+  boardId: Scalars['ID'];
+}>;
+
+
+export type RemovePersonFromBoardMutation = { __typename?: 'Mutation', removePersonFromBoard?: { __typename?: 'RemovePersonFromBoardMutationResponse', boardState?: { __typename: 'BoardState', id: string, revision: number, createdAt: any, rows: Array<{ __typename: 'PersonTile', id: string, row: number, column: number, person: { __typename: 'Person', id: string, name: string, qualifications: Array<string | null> } } | null> } | null } | null };
+
 export const BoardStatePartsFragmentDoc = gql`
     fragment boardStateParts on BoardState {
   __typename
@@ -466,7 +474,7 @@ export type FindPersonByNameQueryHookResult = ReturnType<typeof useFindPersonByN
 export type FindPersonByNameLazyQueryHookResult = ReturnType<typeof useFindPersonByNameLazyQuery>;
 export type FindPersonByNameQueryResult = Apollo.QueryResult<FindPersonByNameQuery, FindPersonByNameQueryVariables>;
 export const CreateAndAddPersonToBoardDocument = gql`
-    mutation CreateAndAddPersonToBoard($person: CreatePersonInput!, $boardId: ID!) {
+    mutation createAndAddPersonToBoard($person: CreatePersonInput!, $boardId: ID!) {
   createAndAddPersonToBoard(person: $person, boardId: $boardId) {
     boardState {
       ...boardStateParts
@@ -502,7 +510,7 @@ export type CreateAndAddPersonToBoardMutationHookResult = ReturnType<typeof useC
 export type CreateAndAddPersonToBoardMutationResult = Apollo.MutationResult<CreateAndAddPersonToBoardMutation>;
 export type CreateAndAddPersonToBoardMutationOptions = Apollo.BaseMutationOptions<CreateAndAddPersonToBoardMutation, CreateAndAddPersonToBoardMutationVariables>;
 export const AddExistingPersonToBoardDocument = gql`
-    mutation AddExistingPersonToBoard($personId: ID!, $boardId: ID!) {
+    mutation addExistingPersonToBoard($personId: ID!, $boardId: ID!) {
   addExistingPersonToBoard(personId: $personId, boardId: $boardId) {
     boardState {
       ...boardStateParts
@@ -537,3 +545,39 @@ export function useAddExistingPersonToBoardMutation(baseOptions?: Apollo.Mutatio
 export type AddExistingPersonToBoardMutationHookResult = ReturnType<typeof useAddExistingPersonToBoardMutation>;
 export type AddExistingPersonToBoardMutationResult = Apollo.MutationResult<AddExistingPersonToBoardMutation>;
 export type AddExistingPersonToBoardMutationOptions = Apollo.BaseMutationOptions<AddExistingPersonToBoardMutation, AddExistingPersonToBoardMutationVariables>;
+export const RemovePersonFromBoardDocument = gql`
+    mutation removePersonFromBoard($personId: ID!, $boardId: ID!) {
+  removePersonFromBoard(personId: $personId, boardId: $boardId) {
+    boardState {
+      ...boardStateParts
+    }
+  }
+}
+    ${BoardStatePartsFragmentDoc}`;
+export type RemovePersonFromBoardMutationFn = Apollo.MutationFunction<RemovePersonFromBoardMutation, RemovePersonFromBoardMutationVariables>;
+
+/**
+ * __useRemovePersonFromBoardMutation__
+ *
+ * To run a mutation, you first call `useRemovePersonFromBoardMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useRemovePersonFromBoardMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [removePersonFromBoardMutation, { data, loading, error }] = useRemovePersonFromBoardMutation({
+ *   variables: {
+ *      personId: // value for 'personId'
+ *      boardId: // value for 'boardId'
+ *   },
+ * });
+ */
+export function useRemovePersonFromBoardMutation(baseOptions?: Apollo.MutationHookOptions<RemovePersonFromBoardMutation, RemovePersonFromBoardMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<RemovePersonFromBoardMutation, RemovePersonFromBoardMutationVariables>(RemovePersonFromBoardDocument, options);
+      }
+export type RemovePersonFromBoardMutationHookResult = ReturnType<typeof useRemovePersonFromBoardMutation>;
+export type RemovePersonFromBoardMutationResult = Apollo.MutationResult<RemovePersonFromBoardMutation>;
+export type RemovePersonFromBoardMutationOptions = Apollo.BaseMutationOptions<RemovePersonFromBoardMutation, RemovePersonFromBoardMutationVariables>;

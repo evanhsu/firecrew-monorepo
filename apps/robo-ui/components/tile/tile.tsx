@@ -1,4 +1,4 @@
-import { Paper } from '@mui/material';
+import { Card, Typography } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import { useDrag } from 'react-dnd';
 import palette from '../../theme/palette';
@@ -6,6 +6,9 @@ import palette from '../../theme/palette';
 export interface TileProps {
     primaryText: string;
     secondaryText?: string;
+    /**
+     * The Tile ID is the same as the ID of the Person represented by this Tile
+     */
     id: string;
     position: {
         row: number;
@@ -13,23 +16,23 @@ export interface TileProps {
     };
 }
 
-export const StyledTile = styled(Paper)<{ isDragging?: boolean }>(
-    ({ theme, isDragging = false }) => ({
-        // border: isDragging ? `2px dashed ${palette.dark.main}` : 'none',
-        boxShadow: `1px 2px 3px ${palette.dark.main}`,
-        flex: 1,
-        width: 80, // The "flex: 1" (above) allows the Tile to stretch to the width of the column, but this is necessary to constrain the text
-        backgroundColor: isDragging
-            ? theme.palette.primary.light
-            : theme.palette.primary.main,
-        display: 'flex',
-        flexDirection: 'column',
-        overflow: 'hidden',
-        whiteSpace: 'nowrap',
-        padding: 5,
-        opacity: isDragging ? 0.4 : 1.0,
-    })
-);
+export const StyledTile = styled(Card, {
+    shouldForwardProp: (prop) => prop !== 'isDragging',
+})<{ isDragging?: boolean }>(({ theme, isDragging = false }) => ({
+    // border: isDragging ? `2px dashed ${palette.dark.main}` : 'none',
+    boxShadow: `1px 2px 3px ${palette.dark.main}`,
+    flex: 1,
+    width: 80, // The "flex: 1" (above) allows the Tile to stretch to the width of the column, but this is necessary to constrain the text
+    backgroundColor: isDragging
+        ? theme.palette.primary.light
+        : theme.palette.primary.main,
+    display: 'flex',
+    flexDirection: 'column',
+    overflow: 'hidden',
+    whiteSpace: 'nowrap',
+    padding: 5,
+    opacity: isDragging ? 0.4 : 1.0,
+}));
 
 // export const StyledTileOutline = styled((props) => (
 //     <Paper {...props} variant="outlined" />
@@ -101,8 +104,8 @@ export function Tile(props: TileProps) {
 
     return (
         <StyledTile ref={dragRef} isDragging={isDragging}>
-            <PrimaryText>{primaryText}</PrimaryText>
-            <SecondaryText>{secondaryText}</SecondaryText>
+            <Typography variant="h3">{primaryText}</Typography>
+            <Typography variant="subtitle1">{secondaryText}</Typography>
         </StyledTile>
     );
 }

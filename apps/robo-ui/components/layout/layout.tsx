@@ -9,9 +9,12 @@ import { createTheme, styled, ThemeProvider } from '@mui/material/styles';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import { useState } from 'react';
-import { layout } from '../../theme';
+import { DndProvider } from 'react-dnd';
+import { HTML5Backend } from 'react-dnd-html5-backend';
+import { TouchBackend } from 'react-dnd-touch-backend';
+import themeOptions, { layout } from '../../theme';
 import { LeftNav } from '../left-nav/left-nav';
-import themeOptions from '../../theme';
+import useDeviceTouchscreenDetector from '../use-device-touchscreen-detector/use-device-touchscreen-detector';
 
 const theme = createTheme(themeOptions);
 
@@ -46,63 +49,69 @@ export const Layout = (props: LayoutProps) => {
         setOpen(!open);
     };
 
+    const deviceHasTouchscreen = useDeviceTouchscreenDetector();
+
     return (
         <ThemeProvider theme={theme}>
-            <Box sx={{ display: 'flex' }}>
-                <CssBaseline />
-                <AppBar position="absolute" open={open}>
-                    <Toolbar
-                        sx={{
-                            pr: '24px', // keep right padding when drawer closed
-                        }}
-                    >
-                        <IconButton
-                            edge="start"
-                            color="inherit"
-                            aria-label="open drawer"
-                            onClick={toggleDrawer}
+            <DndProvider
+                backend={deviceHasTouchscreen ? TouchBackend : HTML5Backend}
+            >
+                <Box sx={{ display: 'flex' }}>
+                    <CssBaseline />
+                    <AppBar position="absolute" open={open}>
+                        <Toolbar
                             sx={{
-                                marginRight: '36px',
-                                ...(open && { display: 'none' }),
+                                pr: '24px', // keep right padding when drawer closed
                             }}
                         >
-                            <MenuIcon />
-                        </IconButton>
-                        <Typography
-                            component="h1"
-                            variant="h6"
-                            color="inherit"
-                            noWrap
-                            sx={{ flexGrow: 1 }}
-                        >
-                            Rotation Board
-                        </Typography>
-                        <IconButton color="inherit">
-                            <Badge badgeContent={4} color="secondary">
-                                Badgin
-                            </Badge>
-                        </IconButton>
-                    </Toolbar>
-                </AppBar>
-                <LeftNav open={open} toggleOpen={toggleDrawer} />
-                <Box
-                    component="main"
-                    sx={{
-                        backgroundColor: (theme) =>
-                            theme.palette.mode === 'light'
-                                ? theme.palette.grey[100]
-                                : theme.palette.grey[900],
-                        flexGrow: 1,
-                        height: '100vh',
-                        overflow: 'auto',
-                    }}
-                >
-                    <Toolbar />
-                    <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
-                        {props.children}
-                    </Container>
+                            <IconButton
+                                edge="start"
+                                color="inherit"
+                                aria-label="open drawer"
+                                onClick={toggleDrawer}
+                                sx={{
+                                    marginRight: '36px',
+                                    ...(open && { display: 'none' }),
+                                }}
+                            >
+                                <MenuIcon />
+                            </IconButton>
+                            <Typography
+                                component="h1"
+                                variant="h6"
+                                color="inherit"
+                                noWrap
+                                sx={{ flexGrow: 1 }}
+                            >
+                                Rotation Board
+                            </Typography>
+                            <IconButton color="inherit">
+                                <Badge badgeContent={4} color="secondary">
+                                    Badgin
+                                </Badge>
+                            </IconButton>
+                        </Toolbar>
+                    </AppBar>
+                    <LeftNav open={open} toggleOpen={toggleDrawer} />
+                    <Box
+                        component="main"
+                        sx={{
+                            backgroundColor: (theme) =>
+                                theme.palette.mode === 'light'
+                                    ? theme.palette.grey[100]
+                                    : theme.palette.grey[900],
+                            flexGrow: 1,
+                            height: '100vh',
+                            overflow: 'auto',
+                        }}
+                    >
+                        <Toolbar />
+                        <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
+                            {props.children}
+                        </Container>
+                    </Box>
                 </Box>
-            </Box>
+            </DndProvider>
         </ThemeProvider>
     );
 };

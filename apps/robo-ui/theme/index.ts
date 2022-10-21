@@ -1,9 +1,11 @@
 import { ThemeOptions } from '@mui/material';
-import palette from './palette';
 import layout from './layout';
+import palette from './palette';
+import typography from './typography';
 
 export const theme: ThemeOptions = {
     palette,
+    typography,
 };
 
 export { layout };

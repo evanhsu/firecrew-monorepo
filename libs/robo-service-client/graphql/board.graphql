@@ -80,7 +80,7 @@ query findPersonByName($fuzzyName: String!, $omitPeopleOnBoard: ID) {
     }
 }
 
-mutation CreateAndAddPersonToBoard($person: CreatePersonInput!, $boardId: ID!) {
+mutation createAndAddPersonToBoard($person: CreatePersonInput!, $boardId: ID!) {
     createAndAddPersonToBoard(person: $person, boardId: $boardId) {
         boardState {
             ...boardStateParts
@@ -88,8 +88,16 @@ mutation CreateAndAddPersonToBoard($person: CreatePersonInput!, $boardId: ID!) {
     }
 }
 
-mutation AddExistingPersonToBoard($personId: ID!, $boardId: ID!) {
+mutation addExistingPersonToBoard($personId: ID!, $boardId: ID!) {
     addExistingPersonToBoard(personId: $personId, boardId: $boardId) {
+        boardState {
+            ...boardStateParts
+        }
+    }
+}
+
+mutation removePersonFromBoard($personId: ID!, $boardId: ID!) {
+    removePersonFromBoard(personId: $personId, boardId: $boardId) {
         boardState {
             ...boardStateParts
         }
