@@ -23,6 +23,8 @@ export function Board(props: BoardProps) {
             variables: {
                 boardId: 'board-1-uuid',
             },
+            // TODO: fix this - the initial query has a top-level field 'getBoardByGroup' that contains an array of Boards.
+            // But the subscription response has a top-level field 'watchBoard' that returns a single Board.
             updateQuery: (
                 prev,
                 {
