@@ -39,6 +39,7 @@ export const PersonQuery = extendType({
             resolve: async (_root, args, ctx) => {
                 let matches: PersonModel[] = [];
 
+                // This is it
                 ctx.services.personService.makeFunOf();
 
                 if (args.include?.fuzzyName) {
