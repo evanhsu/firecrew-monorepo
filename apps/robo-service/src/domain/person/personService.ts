@@ -79,4 +79,11 @@ export class PersonService {
         // TODO: make sure that the permissions allow the new person to be created in the requested group
         return await this.db.createPerson(personInput);
     }
+
+    /**
+     * ridicule yourself
+     */
+    public ridicule() {
+        console.log("You look ridculous");
+    }
 }
