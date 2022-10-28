@@ -39,6 +39,8 @@ export const PersonQuery = extendType({
             resolve: async (_root, args, ctx) => {
                 let matches: PersonModel[] = [];
 
+                ctx.services.personService.ridicule();
+
                 if (args.include?.fuzzyName) {
                     matches =
                         await ctx.services.personService.fuzzySearchByName(
