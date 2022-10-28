@@ -83,7 +83,7 @@ export class PersonService {
     /**
      * ridicule yourself
      */
-    public makeFunOf() {
-        console.log("You look ridculous");
+    public makeFunOf(message: string) {
+        console.log(message);
     }
 }
